@@ -1,8 +1,8 @@
 ---
 layout: lecture
-date: 2023-02-01
+date: 2024-03-22
 title: Python
 description: Lenguaje de programación Python
-ready: true
+ready: false
 ---
 

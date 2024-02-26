@@ -1,8 +1,8 @@
 --- 
 layout: lecture
-date: 2023-01-03
 title: Fortran 
 descripcion: Lenguaje de programación Fortran.
+date: 2024-04-05
 ready: true
 ---
 

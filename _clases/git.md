@@ -1,9 +1,9 @@
 ---
 layout: lecture
-date: 2023-02-02
 title: Git
 description: Control de versiones.
-ready: true
+date: 2024-03-15
+ready: false
 ---
 
 > Git es un sistema de control de cambios que permite llevar registro de modificaciones realizadas en los archivos de un repositorio, asi como facilitar la colaboración entre otras cosas.

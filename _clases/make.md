@@ -1,9 +1,9 @@
 ---
 layout: lecture
-date: 2023-02-01
 title: Makefiles
 description: Compilar progrmas usando Makefiles
-ready: true
+date: 2024-04-05
+ready: false
 ---
 
 > make es una herramienta para mantener y gestionar programas complejos. Esta herramienta determina automáticamente que partes de un programa necesita ser recompilado e invoca comandos para su recompilación.

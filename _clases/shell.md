@@ -1,27 +1,27 @@
 ---
 layout: lecture
-date: 2023-01-01
-ready: true
 title: Shell
 description: Sintaxis básica de shell (bash)
 nav_order: 1
+date: 2024-03-08
+ready: true
 ---
 
-> El shell o terminal, es el programa que nos permite interactuar en tiempo real con el sistema operativo atraves de entradas que damos desde el teclado. Casi todos las distros de Linux usan una sintaxis basada en un proyecto GNU llamado **bash** para la linea de comandos. En sistemas Mac la sintaxis es casi identica, y Windows la esta empezando a adpotar.
+> El shell o terminal, es el programa que nos permite interactuar en tiempo real con el sistema operativo atraves de entradas que damos desde el teclado. Casi todos las distribuciones de Linux usan una sintaxis basada en un proyecto GNU llamado **bash** (Bourne-Again SHell) que es una versión sucesora del programa original `sh` para la linea de comandos. En sistemas Mac la sintaxis es casi identica, y Windows la esta empezando a adpotar.
 
 
 ## Comandos
 
-La *shell* consiste basicamente en una seríe de comandos (que en general son programas en C/C++ ya compilados, es decir ejecutables) que están disponibles para el usuario. La mayoria de los comandos tienen la siguiente sintaxis:
+La *shell* consiste basicamente en una seríe de comandos (que usualmente son programas en C/C++ ya compilados, es decir ejecutables) que están disponibles para el usuario. La mayoria de los comandos tienen la siguiente sintaxis:
 
 ```shell
 mi_comando -opciones <argumentos>
 ```
-donde `mi_comando` es el comando que queremos ejecutar. `-opciones` son opciones de ejecución (tambien conocidas como *flags*), y `argumentos` son los argumentos del comando a ejecutar. Por ejemplo:
+donde `mi_comando` es el comando que queremos ejecutar. `-opciones` son opciones de ejecución (tambien llamadas *flags*), y `argumentos` son los argumentos del comando a ejecutar. Por ejemplo:
 ```shell
 ls -l /usr/bin
 ```
-acá `ls` es un comando que lista los archivos contenidos en cierto directorio, `-l` es una opción para que el listado contenga ciertos detalles de los archivos, y el argumento es el directorio objetivo, en este caso: `/usr/bin`
+acá `ls` es un comando que lista (muestra) los archivos contenidos en cierto directorio, `-l` es una opción para que el listado contenga ciertos detalles de los archivos, y el argumento es el directorio objetivo, en este caso: `/usr/bin`
 
 ## Comentarios
 
@@ -31,38 +31,40 @@ Los comentarios son partes de código ó comandos que no se ejecutan. En el caso
 # Esta linea es un comentario
 ```
 
-Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo demasiado útil en el contexto del *shell* (aunque sí en otros contextos), pero en este tutorial se van a usar bastante así que valía la pena mencionarlo.
+Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo demasiado útil en el contexto del *shell* (aunque sí en otros contextos), pero en este tutorial pueden aparecer así que vale la pena mencionarlo.
 
 
 ## Estructura de directorios en UNIX/Linux
 
 Los sistemas UNIX suelen tener una estructura de directorios (carpetas) bastante similar entre sí, acá vamos a describir solo algunos:
 
-+ `/`: Este es el directorio *base* ó *root* del arbol de archivos.
-+ `/bin`: Acá se almacenan los *binarios* ó ejecutables, por ejemplo muchos de los comandos de la *shell* están acá dentro.
-+ `/home`: Contiene el los directorios base de los usuarios.
-  - `/home/<usuario>`: Carpeta donde están todos los archivos del usuario.
-+ `/lib`: Contiene librerias del sistema.
-+ `/usr`: Contiene ejecutables, librerias, y archivos copartidos.
-  - `/usr/bin`: Archivos binarios compartidos entre usuarios. 
-  - `/usr/include`: *headers* compartidos entre usuarios (usados por programas de C/C++).
-  - `/usr/lib`: librerias compartidas entre usuarios.
+| directorio       | descripción |
+|------------------|-------------|
+| `/`              | Este es el directorio *base* ó *root* del arbol de archivos.  |
+| `/bin`           | Contiene *binarios* ó ejecutables.                            |
+| `/home`          | Contiene directorios base de los usuarios.                    |
+| `/home/<usuario>`| Carpeta donde están todos los archivos del usuario.           |
+| `/lib`           | Contiene librerias del sistema.                               |
+| `/usr`           | Contiene ejecutables, librerias, y archivos copartidos.       |
+| `/usr/bin`       | Archivos binarios compartidos entre usuarios.                 |
+| `/usr/include`   | *headers* compartidos entre usuarios (usados por programas de C/C++). |
+| `/usr/lib`       | librerias compartidas entre usuarios.                         |
+
 
 ## Prompt
 
-Cuando abras la terminal (con ``ctrl``+``T``) vas a encontar con algo asi:
+Cuando abras el emulador de terminal (con `ctrl`+`T`) vas a encontar con algo asi:
 ```shell
 usuario@pc:mi_dir$
 ```
 
-Esto se conoce como **promt**, antecede siempre al cursor, y nos da alguna informacion de cual es nuestro estado.
+Esto se conoce como **prompt**, antecede siempre al cursor, y nos da alguna informacion de cual es nuestro estado.
 Lo primero que dice es quien es el usuario que va a ejecutar las instrucciones (*usuario*), luego del **`@`** dice desde que computadora (*pc*), seguido de **`:`** dice el directorio en el que estamos ubicados dentro de *pc*, y por ultimo un signo que indica los privilegios del usuario (**`$`**: usuario normal, **`#`**:superuser/admin).
 El prompt es completamente customizable y por lo tanto es posible encontrar otras estructuras, pero en general por default tienen estos elementos.
 
-
 ## Navegación
 
-Veamos como navegar en LINUX, esto es ir de una carpeta a otra y revisar el contenido.
+Veamos como navegar en LINUX, esto es ir de una carpeta a otra y revisar el contenido, etc.
 
 Para conocer la ubicacion absoluta en la que estamos (la del prompt es relativa a la carpeta principal del usuario) utilizamos el comando `pwd`:
 ```shell
@@ -82,7 +84,8 @@ usuario@pc:~$ cd Desktop
 usuario@pc:~/Desktop$ cd ..
 usuario@pc:~$
 ```
-> notar que con `cd ..` retornamos al directorio *madre*.
+> Notar que con `cd ..` retornamos al directorio *madre*. 
+> Otro *short-cut* útil es: `cd -` que retorna al directorio de trabajo anterior.
 
 Para borrar la pantalla de comandos escribimos:
 ```shell
@@ -91,13 +94,14 @@ usuario@pc:~$ clear
 > una alternativa de `clear` es `<ctl>`+`l`
 
 ## Directorios y archivos
+
 Veamos como crear/borrar directorios y archivos:
 
-Para crear/borrar una carpeta existen los siguientes comandos:
+Para crear/borrar una carpeta (ó directorio) existen los siguientes comandos:
 ```shell
 usuario@pc:~$ mkdir carpeta	#crea directorio
 usuario@pc:~$ rmdir carpeta	#elimina directorio
-usuario@pc:~$ rm -r carpeta	#elimina directorio y todo su contenido (OJO!!)
+usuario@pc:~$ rm -r carpeta	#elimina directorio y todo su contenido (OJO!)
 ```
 
 Para crear/borrar un archivo:
@@ -114,6 +118,7 @@ usuario@pc:~$ mv archivo archivo_movido   #mover archivo (tambien sirve para ren
 
 ## Links simbolicos vs duros
 
+<!-- MEJORAR!!  -->
 Un análogo a los "accesos directos" de Windows son los links, y hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
 
 Un link simbólicos se crea así:
@@ -125,45 +130,51 @@ Un link duro se crea así:
 usuario@pc:~$ ln archivo link_archivo 
 ```
 estos ultimos son más antiguos que los anteriores y tienen algunas limitaciones por lo que se acostumbra a usar links simbólicos.
-<!--
-Para entender la diferencia entre estos links es útil considerar que los archivos en consisten en dos partes: su nombre, y su contenido. Por 
+<!-- Para entender la diferencia entre estos links es útil considerar que los archivos en consisten en dos partes: su nombre, y su contenido. Por 
 ### Inodes
 ```shell 
 ls -i
-```
--->
+``` -->
 
 
-## I/O
-Muchos de los comandos utilizados hasta ahora generan un output de algun tipo. 
-Estos outputs consisten en dos tipos:
-  - resultados que el programa esta diseñado a producir (*stdout*)
-  - estado y mensajes de error  (*stderr*)
+## Input/Output
 
-Por ejemplo en linux, `ls` manda sus resultados a un archivo especial llamado *stdout*, y su status a otro llamado *stderr*. Ambos estan linkeados por default con la pantalla.
+Muchos de los comandos utilizados hasta ahora generan un output de algun tipo. Estos outputs consisten en dos tipos:
+- resultados que el programa esta diseñado a producir (*stdout*)
+- mensajes de error  (*stderr*)
+
+Por ejemplo en linux, `ls` manda sus resultados a un archivo especial `/dev/stdout`, y los mensajes de error a otro llamado `/dev/stderr`. Ambos estan linkeados por default con la pantalla.
 
 Ademas muchos programas toman sus argumentos de un *stdin*, por default linkeado a las entradas desde el teclado.
 
-## Redireccion de `stdout` `stdin`
+## Redireccion de `stdout`, `stderr` y `stdin`
+
 Las salidas de los comandos por default generalmente van a la pantalla, y los inputs se toman desde el teclado.
 Sin embargo podemos decidir donde llevar los stdin/stdout utilizando comandos de redireccion:
-
 ```shell
-usuario@pc:~$ echo "Hola"		   #stdin   a  stdout
-usuario@pc:~$ read var			   #stdin   a  var
-usuario@pc:~$ cat > archivo 		   #stdin   a  archivo
-usuario@pc:~$ cat archivo >> archivo 	   #archivo a  archivo (lo agrega)
-usuario@pc:~$ cat animales | sort	   #comando a  comando ("pipe")
-usuario@pc:~$ echo "Hola" | tee archivo	   #stdin    a  archivo y stdout ("tee")
-usuario@pc:~$ echo "Algo" | xargs mkdir	   #xargs: ejecuta comandos de un standard input (los pasa a argumentos de comandos)
+usuario@pc:~$ ls /usr/bin 1> msg_log.txt
+usuario@pc:~$ ls /bin/usr 2> /dev/null
 ```
 
-### Redirección stderr
+> Notar que el mensaje de error en el ultimo ejemplo fue enviado a `/dev/null` que es un archivo usado frecuentemente para enviar cosas que no serán usadas.
 
-Para redireccionar el *stderr* usamos `2>`
 ```shell
-ls -l /bin/usr 2> /dev/null
+usuario@pc:~$ echo "Hola"		 #stdin   a stdout
+usuario@pc:~$ read var			 #stdin   a var
+usuario@pc:~$ cat > archivo 		 #stdin   a archivo
+usuario@pc:~$ cat archivo >> archivo 	 #archivo a archivo (lo agrega)
 ```
+
+### Pipelines
+
+Una forma comun de redirigir `stdout` para usarlos en otros comandos es usando *pipelines* (`|`):
+
+```shell
+usuario@pc:~$ cat animales | sort	 #comando a comando ("pipe")
+usuario@pc:~$ echo "Hola" | tee archivo	 #stdin   a archivo y stdout ("tee")
+usuario@pc:~$ echo "Algo" | xargs mkdir	 #xargs: ejecuta comandos de un standard input (los pasa a argumentos de comandos)
+```
+
 
 ### Status
 
@@ -173,32 +184,39 @@ echo $?
 ```
 
 
-## Archivos de texto:
+## Archivos de texto
 Para ver el contenido de un archivo de texto tenemos varias opciones:
 
 ```shell
-usuario@pc:~$ cat archivo		#muestra todo el contenido como stdout
-usuario@pc:~$ head archivo		#ver primer parte
-usuario@pc:~$ tail archivo		#ver última parte
-usuario@pc:~$ more archivo		#solo lectura (viejo)
-usuario@pc:~$ less archivo  		#version moderna de less  ("more is less" xD)
+usuario@pc:~$ cat archivo	#muestra todo el contenido como stdout
+usuario@pc:~$ head archivo	#ver primer parte
+usuario@pc:~$ tail archivo	#ver última parte
+```
+
+```shell
+usuario@pc:~$ more archivo	#solo lectura (viejo)
+usuario@pc:~$ less archivo  	#version moderna de less  ("more is less" xD)
 ```
 
 ### Editores de texto
 Si buscamos un editor de texto con más funciones, algunos de los mas conocidos son:
 
 ```shell
+usuario@pc:~$ gedit archivo	#(~ bloc de notas)
 usuario@pc:~$ vim archivo	#(Recomiendo!)
 usuario@pc:~$ nano archivo	#
 usuario@pc:~$ emacs archivo	#
 ```
 
 ### Editores *al vuelo*
-Un editor *on the fly* muy utilizado es `sed`:
+Un editor *on the fly* muy utilizado es `sed` (*Stream EDitor*):
 
 ```shell
-usuario@pc:~$ sed 's/ioeu/a/g' archivo	#Stream Editor
+usuario@pc:~$ sed 's/ioeu/a/g' archivo	
 ```
+
+<!-- (!) Poner 2 ejemplos más para que se aprecie la utilidad que tiene.. -->
+
 
 ### Expresiones regulares
 Las expresiones regulares son formulas abstractas que representan patrones de texto que tienen cierta estructura. Son muy útiles para buscar (y modificar) secuencias de texto dentro de un archivo que siga determinado patron.
@@ -239,7 +257,7 @@ usuario@pc:~$ users			#ver users
 Para utilizar la terminal como otro usuario :
 
 ```shell
-usuario@pc:~$ su - user2		#ingreso a la cuenta de user2 como si fuese el
+usuario@pc:~$ su - user2	#ingreso a la cuenta de user2 como si fuese el
 usuario@pc:~$ su user2		#ingreso a la cuenta de user2, pero como user actual
 ```
 
@@ -266,11 +284,11 @@ La primer secencia de letras y guíones describe el tipo de archivo (primer letr
 
 El modo queda definido por tres numeros binarios (ó su equivalente hexadecimal). Por ejemplo `Desktop` tiene modo 111 101 101 (es decir: 755) y `examples.desktop` tiene modo 110 100 100 (es decir 644). La forma de leerlo es:
 
-| descr.   | {tipo}|  {user}   | {group}  | {anyone} | 
-|:-------- |:-----:|:---------:|:--------:|:--------:| 
-| alphanum |   -   | r w x  -  | r w x  - | r w x    | 
-| binario  |       | 1 1 1  -  | 0 1 0  - | 1 0 1    | 
-| decimal  |       |   7       |   2      |    5     | 
+| descr.   | {tipo} |  {user}   | {group}  | {anyone} | 
+|:-------- |:------:|:---------:|:--------:|:--------:| 
+| alphanum |   -    | r w x  -  | r w x  - | r w x    | 
+| binario  |        | 1 1 1  -  | 0 1 0  - | 1 0 1    | 
+| decimal  |        |   7       |   2      |    5     | 
 
 
 Para modificar el *modo* se utiliza el comando `chmod`:
@@ -324,21 +342,21 @@ kill [señal] PID
 ```
 
 
-Señales:
+Señales comúnes:
 
 
-|Numero| Nombre | Significado           |
-|------|--------|-----------------------|
-|1     | ` HUP` | Hang up.              |
-|2     | ` INT` | Interrupt. (CTRL -C)  |
-|9     | `KILL` | Kill.                 |
-|15    | `TERM` | Terminate. (default). |
-|18    | `CONT` | Continue. Restaura proceso luego de una señal STOP |
-|19    | `STOP` | Stop. Pausa sin terminar el proceso.               |
-|3     | `QUIT` | Quit.                    |
-|11    | `SEGV` | Segmentation violation.  |
-|20    | `TSTP` | Terminal stop.           |
-|28    |`WINCH` | Window change.           |
+|Num| Nombre | Significado                                        |
+|---|--------|----------------------------------------------------|
+|1  | ` HUP` | Hang up.                                           |
+|2  | ` INT` | Interrupt. (CTRL -C)                               |
+|9  | `KILL` | Kill.                                              |
+|15 | `TERM` | Terminate. (default).                              |
+|18 | `CONT` | Continue. Restaura proceso luego de una señal STOP.|
+|19 | `STOP` | Stop. Pausa sin terminar el proceso.               |
+|3  | `QUIT` | Quit.                                              |
+|11 | `SEGV` | Segmentation violation.                            |
+|20 | `TSTP` | Terminal stop.                                     |
+|28 |`WINCH` | Window change.                                     |
 
 
 ## COMANDOS UTILES:
@@ -442,3 +460,44 @@ usuario@pc:~$ df 	#
 | `$RANDOM`        | A pseudo random integer between 0 and 32767
 | `$REPLY `        |Variable used by read by default when no variable is specified. Also used by select to return the user-supplied value
 | `$PIPESTATUS`  | Array variable that holds the exit status values of each command in the most recently executed foreground pipeline.
+
+
+
+## Brace expansions:
+
+```shell
+echo hola_{0..9}_{.txt,.dat}
+```
+
+
+
+## Arrays
+```shell
+letras=("a", "b", "c")
+
+echo ${letras[@]}
+echo ${letras[*]}
+echo ${letras[@]}
+
+```
+
+
+```shell
+var="PreHolaPost"
+usuario@ram:~/test$ echo ${var#Pre}
+HolaPost
+usuario@ram:~/test$ echo ${var#Post}
+PreHolaPost
+usuario@ram:~/test$ echo ${var%Post}
+PreHola
+usuario@ram:~/test$ echo ${var/Hola/CHAU}
+PreCHAUPost
+
+```
+
+
+##  `set`
+
+```shell
+set -x
+```
