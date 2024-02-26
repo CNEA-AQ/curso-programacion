@@ -1,0 +1,57 @@
+# Temas a cubir
+├── 01sels
+│   [ ] Directos: Cramer, Backsustitution, Elim Gauss. , descomp LU y Choleski
+│   [ ] Iterativos: gaussseidel, jacobi, SOR
+│      
+├── 02senls
+│   [ ] biseccion.f90
+│   [ ] regulafalsi.f90
+│   [ ] newtonraphson.f90
+│   [ ] puntofijo.f90
+│   [ ] secante.f90
+│
+├── 03interpolacion
+│   [ ] lagrange.f90
+│   [ ] newton.f90
+│   [ ] hermite.f90
+│   [ ] tchevychev
+│   [ ] Interp. a trozos: linal, cubica, splines
+│
+├── 04aproximacion
+│   [ ] fun_ort.f90
+│   [ ] polinomica.f90
+│   [ ] racional.f90
+│   [ ] trigonometrica.f90
+│
+├── 05diferenciacion
+│   [ ] diff.f90
+│   [ ] hessian.f90
+│   [ ] jacobian.f90
+│   [ ] richardson.f90
+│
+├── 06integracion
+│   [ ] NewtonCotesA.f90
+│   [ ] NewtonCotesC.f90
+│   [ ] trapecio
+│   [ ] simpson 
+│   [ ] CuadraturaGauss.f90
+│   [ ] Romberg.f90
+│
+├── 07pvi
+│   [ ] PVI_explicitos.f90
+│   [ ] PVI_implicitos.f90
+│
+├── 08pvc
+│   [ ] MDF.f90
+│   [ ] MEF.f90
+│   [ ] MVF.f90
+│ 
+├── 09fourier
+│   [ ] dft.f90
+│   [ ] fft.f90
+│   [ ] mainFourier.f90
+│
+└── 10autovalores
+    [ ] potencia.f90
+
+

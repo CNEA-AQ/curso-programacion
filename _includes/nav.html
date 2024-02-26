@@ -1,0 +1,24 @@
+<div id="nav-bg">
+  <nav id="top-nav">
+   
+   
+        <span class="nav-link"><a href="{{ site.baseurl }}/" id="logo">./sintaxis</a></span>
+        <span class="nav-link dropdown"><a href="{{ site.baseurl }}/clases">clases</a>
+         <div class="dropdown-content">
+            {% assign lectures = site['clases'] | sort: 'date' %}
+            {% for lecture in lectures %}
+              {% if lecture.phony != true %}
+                  {% if lecture.ready %}
+                    <a href="{{ site.baseurl }}{{ lecture.url }}">{{ lecture.title }}</a>
+                  {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </span>
+        <span class="nav-link"><a href="{{site.baseurl}}/ejemplos/">ejemplos</a></span>
+    <!--div class="trigger">         
+    <div class="trigger-child">
+    </div>
+    </div-->
+  </nav>
+</div>
