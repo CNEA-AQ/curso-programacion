@@ -37,7 +37,7 @@ Acá podés encontrár algunas [aplicaciones](./ejemplos/) que trataremos en el 
 ---
 
 <div class="small center">
-<p><a href="https://github.com/ramespada/sintaxis">Repositorio</a>.</p>
+<p><a href="https://github.com/cnea-aq/curso-programacion">Repositorio</a>.</p>
 <p>Grupo de Química de la Atmósfera,</p>
 <p>CNEA.</p>
 </div>

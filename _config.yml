@@ -1,7 +1,7 @@
 # Setup
-title: 'sintaxis'
-url: https://ramespada.github.io
-baseurl: /sintaxis
+title: 'curso-programacion'
+url: https://cnea-aq.github.io
+baseurl: /curso-programacion
 # Settings
 markdown: kramdown
 kramdown:
