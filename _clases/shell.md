@@ -118,61 +118,148 @@ usuario@pc:~$ mv archivo archivo_movido   #mover archivo (tambien sirve para ren
 
 ## Links simbolicos vs duros
 
-<!-- MEJORAR!!  -->
-Un análogo a los "accesos directos" de Windows son los links, y hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
+Algo análogo a los "accesos directos" de Windows son los links, y en UNIX los hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
 
 Un link simbólicos se crea así:
 ```shell
-usuario@pc:~$ ln -s archivo link_archivo
+usuario@pc:~$ ln -s archivo link_soft
 ```
+
 Un link duro se crea así:
 ```shell
-usuario@pc:~$ ln archivo link_archivo 
+usuario@pc:~$ ln archivo link_hard 
 ```
-estos ultimos son más antiguos que los anteriores y tienen algunas limitaciones por lo que se acostumbra a usar links simbólicos.
-<!-- Para entender la diferencia entre estos links es útil considerar que los archivos en consisten en dos partes: su nombre, y su contenido. Por 
+
+estos ultimos son más antiguos que los simbólicos y tienen algunas limitaciones por lo que se recomienda usar links simbólicos.
+
 ### Inodes
+Para entender la diferencia entre links simbólicos y duros tenemos que saber que los archivos consisten en dos partes: 
+- su contenido, 
+- y su numbre/metadata.
+
+cuando creamos *hard-links* estamos creando un nombre adicional para un bloque de contenido pre-existente. Tanto el archivo original como el link son indistinguibles ya que son dos formas distintas de nombrar al mismo conjunto de datos. Si borramos el archivo original el link sigue funcionando ya que el contenido no se borra y el link sigue apuntando al bloque datos original.
+
+Cuando creamos un *sym-link* lo que creamos es un nuevo archivo que apunta al nombre del archivo original. En este sentido si borramos el archivo original este link queda "huerfano" y no posee ningun dato.
+ 
+Cada archivo tiene un idenitificador único conocido como *inode-number* podemos ver el inode de cada archivo con el siguiente comando:
+
 ```shell 
-ls -i
-``` -->
+usuario@pc:~$ ls -li
+total 0
+23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 archivo
+23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 link_hard
+23644387 lrwxrwxrwx 1 usuario usuario 7 feb 27 11:10 link_soft -> archivo
+
+``` 
+
+notar que los links duros y tienen el mismo *inode-number* que su archivo target, pero los links simbólicos no.
 
 
 ## Input/Output
 
 Muchos de los comandos utilizados hasta ahora generan un output de algun tipo. Estos outputs consisten en dos tipos:
 - resultados que el programa esta diseñado a producir (*stdout*)
-- mensajes de error  (*stderr*)
+- estado y mensajes de error  (*stderr*)
 
 Por ejemplo en linux, `ls` manda sus resultados a un archivo especial `/dev/stdout`, y los mensajes de error a otro llamado `/dev/stderr`. Ambos estan linkeados por default con la pantalla.
 
 Ademas muchos programas toman sus argumentos de un *stdin*, por default linkeado a las entradas desde el teclado.
 
+
 ## Redireccion de `stdout`, `stderr` y `stdin`
 
-Las salidas de los comandos por default generalmente van a la pantalla, y los inputs se toman desde el teclado.
-Sin embargo podemos decidir donde llevar los stdin/stdout utilizando comandos de redireccion:
-```shell
-usuario@pc:~$ ls /usr/bin 1> msg_log.txt
-usuario@pc:~$ ls /bin/usr 2> /dev/null
-```
-
-> Notar que el mensaje de error en el ultimo ejemplo fue enviado a `/dev/null` que es un archivo usado frecuentemente para enviar cosas que no serán usadas.
+Las salidas de los comandos por default van a la pantalla, y los inputs se toman desde el teclado.
+Sin embargo podemos decidir donde llevar los stdin/stdout utilizando comandos de redireccionamiento:
 
 ```shell
-usuario@pc:~$ echo "Hola"		 #stdin   a stdout
-usuario@pc:~$ read var			 #stdin   a var
-usuario@pc:~$ cat > archivo 		 #stdin   a archivo
-usuario@pc:~$ cat archivo >> archivo 	 #archivo a archivo (lo agrega)
+usuario@pc:~$ ls /usr/bin > ls-output.txt
 ```
+acá enviamos la lista de los archivos almacenados en `/usr/bin` a un archivo llamado `ls-output.txt`. Podemos ver su contenido usando el comando `cat`:
+```shell
+usuario@pc:~$ cat ls-output.txt
+```
+
+cada vez que redirecionamos utilizando el simbolo `>` el archivo se borra completamente y sobreescribe el mensaje de salida. Pero es posible tambien redireccionar de forma que se agregue como una nueva linea a un archivo preexistente:
+
+```shell
+usuario@pc:~$ echo "hola"        >  archivo.txt    #
+usuario@pc:~$ echo "como estás?" >> archivo.txt    #archivo a archivo (lo agrega)
+usuario@pc:~$ cat archivo.txt
+hola
+como estás?
+```
+
+Hagamos de nuevo una redirección pero esta vez vamos a ejecutar `ls` sobre un directorio que no existe:
+```shell
+usuario@pc:~$ ls /bin/usr > ls-output.txt
+ls: cannot access /bin/usr: No such file or directory
+```
+vemos un mensaje de error, pero ¿Por que se muestra en pantalla y no fue redireccionado al archivo ls-output.txt? Esto se debe a que los mensajes de error no se envian como *stout*, sino por la vía de *stderr*. Si queremos redireccionar un mensaje de error usamos `2>`:
+
+```shell
+usuario@pc:~$ ls /bin/usr 2> ls-error.txt
+```
+
+> Es común ver que los mensajes de error se redireccionan a un archivo especial `/dev/null`, a este archivo (también conocido como *bit bucket*) se envian frecuentemente cualquier mensaje o datos que no nos interesan ni serán usados en el futuro.
+
+También es posible redireccionar las entradas que damos por teclado (*stdin*):
+```shell
+usuario@pc:~$ cat archivo.txt
+```
+
+`cat` lee uno o más archivos y los copia dentro de *stdout*. Se usa generalmente para leer archivos cortos, y para concatenar archivos.
+
+Si ejecutamos `cat` sin ningun argumento este redirecciona todo lo que tipeamos en el tecldo (*stdin*) al *stdout*:
+```shell
+usuario@pc:~$ cat 
+hola
+hola
+como estás?
+como estás?
+```
+
+Como siempre podemos redireccionar esto a un archivo usando el simbolo `>`:
+```shell
+usuario@pc:~$ cat  > archivo.txt
+hola
+como estás?
+usuario@pc:~$ cat archivo.txt
+hola
+como estás?
+```
+
+<!-- usuario@pc:~$ read var	#stdin   a variable -->
+<!-- usuario@pc:~$ echo "Hola"	#stdin   a stdout   -->
+
 
 ### Pipelines
 
-Una forma comun de redirigir `stdout` para usarlos en otros comandos es usando *pipelines* (`|`):
+Una forma comun de redirigir `stdout` de un comando para usarlo en otro comando es mediante el uso de *pipelines* (`|`):
 
 ```shell
-usuario@pc:~$ cat animales | sort	 #comando a comando ("pipe")
-usuario@pc:~$ echo "Hola" | tee archivo	 #stdin   a archivo y stdout ("tee")
-usuario@pc:~$ echo "Algo" | xargs mkdir	 #xargs: ejecuta comandos de un standard input (los pasa a argumentos de comandos)
+usuario@pc:~$ ls /usr/bin | sort	 
+```
+en este ejemplo listamos los archivos presentes en `/usr/bin` y la salida se la pasamos al comando `sort` que ordena en orden alfabético la lista. `sort` en este ejemplo juega el rol *filtro*, ya que toma una salida como *stdout*, la procesa y devuelve una nueva salida. Existen otros filtros, por nombrar algunos de los más usados: `uniq`, `grep`, `wc`, entre otros.
+
+
+Existe un comando frecuentemente usado que toma un *stdout* y lo redirecciona a un archivo y al mismo tiempo a *stdout*, este se llama `tee` :
+
+```shell
+usuario@pc:~$ echo "Hola" | tee archivo.txt
+Hola
+usuario@pc:~$ cat archivo.txt
+Hola
+```
+
+Hay ciertos comandos que no admiten *stdout* como argumentos, por ejemplo:
+```shell
+usuario@pc:~$ echo "carpeta" | mkdir
+mkdir: missing operand
+```
+
+para esto existe el comando `xargs` que toma valores de *stdout* y los convierte a una lista de argumentos para determinados comandos:
+```shell
+usuario@pc:~$ echo "carpeta" | xargs mkdir	
 ```
 
 
@@ -219,6 +306,7 @@ usuario@pc:~$ sed 's/ioeu/a/g' archivo
 
 
 ### Expresiones regulares
+
 Las expresiones regulares son formulas abstractas que representan patrones de texto que tienen cierta estructura. Son muy útiles para buscar (y modificar) secuencias de texto dentro de un archivo que siga determinado patron.
 
 Hay distintos comandos para trabajar con expresiones regulares, el mas conocido es ``grep``:
@@ -226,6 +314,7 @@ Hay distintos comandos para trabajar con expresiones regulares, el mas conocido 
 ```shell
 usuario@pc:~$ ls | grep "*.txt"	# mostrar archivos terminados en ".txt"
 ```
+
 
 ## Busqueda de archivos
 Hay dos comandos principales para buscar archivos:
@@ -250,11 +339,12 @@ Linux es un sistema operativo *multiusuario*, esto significa que muchos usuarios
 Cada usuario tiene un id, y tiene ciertos privilegios.
 
 ```shell
-usuario@pc:~$ id 			#ver id de usuario
-usuario@pc:~$ users			#ver users
+usuario@pc:~$ id    
+usuario@pc:~$ users 
+usuario@pc:~$ groups
 ```
 
-Para utilizar la terminal como otro usuario :
+Para utilizar la terminal como otro usuario:
 
 ```shell
 usuario@pc:~$ su - user2	#ingreso a la cuenta de user2 como si fuese el
@@ -268,6 +358,7 @@ usuario@pc:~$ sudo			#ejecutar comando como superuser
 ```
 
 ## Informacion de archivos
+
 ```shell
 usuario@pc:~$ file <archivo>	#te muestra tipo de archivo
 usuario@pc:~$ stat <archivo>  	#te muestra el estado del archivo
@@ -280,31 +371,27 @@ drwxr-xr-x  8 usuario usuario    69632 may 19 22:55  Desktop
 -rw-r--r--  1 usuario usuario     8980 abr  9 12:03  examples.desktop
 lrwxrwxrwx  1 usuario usuario       15 may 27 14:43  dni.pdf -> Desktop/dni.pdf
 ```
-La primer secencia de letras y guíones describe el tipo de archivo (primer letra, **d**: directorio, **l**: link, **-** otro.) y el modo ó permisos para usar de cada arcihvo ó directorio (últimos 9 caracteréres, donde: **r**: permiso de lectura, **w**: permiso de escritura, **x**: permiso de ejecucion
+La primer secencia de 10 letras y guíones describe el tipo de archivo (primer letra, **d**: directorio, **l**: link, **-** otro.) y el modo ó permisos para usar de cada arcihvo ó directorio (últimos 9 caracteréres, donde: **r**: permiso de lectura, **w**: permiso de escritura, **x**: permiso de ejecucion
 
 El modo queda definido por tres numeros binarios (ó su equivalente hexadecimal). Por ejemplo `Desktop` tiene modo 111 101 101 (es decir: 755) y `examples.desktop` tiene modo 110 100 100 (es decir 644). La forma de leerlo es:
 
 | descr.   | {tipo} |  {user}   | {group}  | {anyone} | 
 |:-------- |:------:|:---------:|:--------:|:--------:| 
-| alphanum |   -    | r w x  -  | r w x  - | r w x    | 
+| alphanum |   -    | r w x  -  | - w -  - | r - x    | 
 | binario  |        | 1 1 1  -  | 0 1 0  - | 1 0 1    | 
 | decimal  |        |   7       |   2      |    5     | 
 
 
-Para modificar el *modo* se utiliza el comando `chmod`:
+Para modificar el *modo* se utiliza el comando `chmod`, por ejemplo para agregar permiso de ejecución:
 
 ```shell
-usuario@pc:~$ chmod <opcion> <archivo>	#cambiar modo de archivo 
-```
-
-```shell
-usuario@pc:~$ chmod +x script.sh	#agregar permiso de ejecución a todos.
+usuario@pc:~$ chmod +x script.sh
 ```
 
 Para cambiar de propetiario y grupo de un archivo se utilizan los siguientes comandos:
 ```shell
-usuario@pc:~$ chown archivo	#change owner (propietario)
-usuario@pc:~$ chgrp archivo	#change group 
+usuario@pc:~$ chown archivo.txt	#change owner (propietario)
+usuario@pc:~$ chgrp archivo.txt	#change group 
 ```
 
 ## Procesos
@@ -345,18 +432,18 @@ kill [señal] PID
 Señales comúnes:
 
 
-|Num| Nombre | Significado                                        |
-|---|--------|----------------------------------------------------|
-|1  | ` HUP` | Hang up.                                           |
-|2  | ` INT` | Interrupt. (CTRL -C)                               |
-|9  | `KILL` | Kill.                                              |
-|15 | `TERM` | Terminate. (default).                              |
-|18 | `CONT` | Continue. Restaura proceso luego de una señal STOP.|
-|19 | `STOP` | Stop. Pausa sin terminar el proceso.               |
-|3  | `QUIT` | Quit.                                              |
-|11 | `SEGV` | Segmentation violation.                            |
-|20 | `TSTP` | Terminal stop.                                     |
-|28 |`WINCH` | Window change.                                     |
+| Num.| Nombre | Significado                                        |
+|-----|--------|----------------------------------------------------|
+| 1   | ` HUP` | Hang up.                                           |
+| 2   | ` INT` | Interrupt. (CTRL -C)                               |
+| 9   | `KILL` | Kill.                                              |
+| 15  | `TERM` | Terminate. (default).                              |
+| 18  | `CONT` | Continue. Restaura proceso luego de una señal STOP.|
+| 19  | `STOP` | Stop. Pausa sin terminar el proceso.               |
+| 3   | `QUIT` | Quit.                                              |
+| 11  | `SEGV` | Segmentation violation.                            |
+| 20  | `TSTP` | Terminal stop.                                     |
+| 28  |`WINCH` | Window change.                                     |
 
 
 ## COMANDOS UTILES:
@@ -463,7 +550,9 @@ usuario@pc:~$ df 	#
 
 
 
-## Brace expansions:
+## Expansiones
+
+### Brace expansions
 
 ```shell
 echo hola_{0..9}_{.txt,.dat}
