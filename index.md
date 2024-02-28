@@ -21,13 +21,13 @@ Acá subiremos algo de [material](./material/) para profundizar los temas tratad
     {% if clase.phony != true %}
       {% if clase.ready %}
         <li>
-        <strong>{{ clase.date | date: '%d/%m. ' }}</strong>:
+        <strong>{{ clase.date | date: '%d/%m' }}</strong>:
             <a href="{{site.baseurl}}{{ clase.url }}">{{ clase.title }}</a>
         </li>
         {% else %}
         <li>
-        <strong>{{ clase.date | date: '%d/%m. ' }}</strong>:
-            <a href="">{{ clase.title }}</a>
+        <strong>{{ clase.date | date: '%d/%m' }}</strong>:
+            {{ clase.title }} [coming soon]
         </li>
         {% comment %}
         	 <li>  {{ clase.title }} {% if clase.noclass %}[no class]{% endif %}</li> 
@@ -42,7 +42,7 @@ Acá subiremos algo de [material](./material/) para profundizar los temas tratad
 ---
 
 <div class="small center">
-<p><a href="https://github.com/cnea-aq/curso-programacion">Repositorio</a>.</p>
+<p><a href="https://github.com/CNEA-AQ/curso-programacion">Repositorio</a>.</p>
 <p>Grupo de Química de la Atmósfera,</p>
 <p>CNEA.</p>
 </div>

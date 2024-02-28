@@ -7,7 +7,18 @@ date: 2024-03-08
 ready: true
 ---
 
-> El shell o terminal, es el programa que nos permite interactuar en tiempo real con el sistema operativo atraves de entradas que damos desde el teclado. Casi todos las distribuciones de Linux usan una sintaxis basada en un proyecto GNU llamado **bash** (Bourne-Again SHell) que es una versión sucesora del programa original `sh` para la linea de comandos. En sistemas Mac la sintaxis es casi identica, y Windows la esta empezando a adpotar.
+> La *shell* o terminal, es el programa que nos permite interactuar en tiempo real con el sistema operativo atraves de entradas que damos desde el teclado. Casi todos las distribuciones de Linux usan una sintaxis basada en un proyecto GNU llamado **bash** (Bourne-Again SHell) que es una versión sucesora del programa original `sh` para la linea de comandos. En sistemas Mac la sintaxis es casi identica, y Windows la esta empezando a adpotar.
+
+## Prompt
+
+Cuando abras el emulador de terminal (con `ctrl`+`T`) vas a encontar con algo asi:
+```shell
+usuario@pc:mi_dir$
+```
+
+Esto se conoce como **prompt**, antecede siempre al cursor, y nos da alguna informacion de cual es nuestro estado.
+Lo primero que dice es quien es el usuario que va a ejecutar las instrucciones (*usuario*), luego del **`@`** dice desde que computadora (*pc*), seguido de **`:`** dice el directorio en el que estamos ubicados dentro de *pc*, y por ultimo un signo que indica los privilegios del usuario (**`$`**: usuario normal, **`#`**:superuser/admin).
+El prompt es completamente customizable y por lo tanto es posible encontrar otras estructuras, pero en general por default tienen estos elementos.
 
 
 ## Comandos
@@ -15,13 +26,15 @@ ready: true
 La *shell* consiste basicamente en una seríe de comandos (que usualmente son programas en C/C++ ya compilados, es decir ejecutables) que están disponibles para el usuario. La mayoria de los comandos tienen la siguiente sintaxis:
 
 ```shell
-mi_comando -opciones <argumentos>
+comando -opciones <argumentos>
 ```
-donde `mi_comando` es el comando que queremos ejecutar. `-opciones` son opciones de ejecución (tambien llamadas *flags*), y `argumentos` son los argumentos del comando a ejecutar. Por ejemplo:
+donde `comando` es el comando que queremos ejecutar. `-opciones` son opciones de ejecución (tambien llamadas *flags*), y `argumentos` son los argumentos del comando a ejecutar. Por ejemplo:
+
 ```shell
-ls -l /usr/bin
+echo -n "Hola"
 ```
-acá `ls` es un comando que lista (muestra) los archivos contenidos en cierto directorio, `-l` es una opción para que el listado contenga ciertos detalles de los archivos, y el argumento es el directorio objetivo, en este caso: `/usr/bin`
+
+acá `echo` es un comando que imprime un mensaje en la pantalla. `-n` es una opción para que el mensaje no termine en linea nueva, y el argumento de este comando es el mensaje en si que se busca mostrar.
 
 ## Comentarios
 
@@ -31,12 +44,14 @@ Los comentarios son partes de código ó comandos que no se ejecutan. En el caso
 # Esta linea es un comentario
 ```
 
-Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo demasiado útil en el contexto del *shell* (aunque sí en otros contextos), pero en este tutorial pueden aparecer así que vale la pena mencionarlo.
+Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo demasiado útil en el contexto de la *shell* (pero sí en otros contextos), en este tutorial pueden aparecer así que vale la pena mencionarlo.
 
 
 ## Estructura de directorios en UNIX/Linux
 
 Los sistemas UNIX suelen tener una estructura de directorios (carpetas) bastante similar entre sí, acá vamos a describir solo algunos:
+
+![linux-filesystem](./imgs/linux-filesystem.png)
 
 | directorio       | descripción |
 |------------------|-------------|
@@ -50,17 +65,6 @@ Los sistemas UNIX suelen tener una estructura de directorios (carpetas) bastante
 | `/usr/include`   | *headers* compartidos entre usuarios (usados por programas de C/C++). |
 | `/usr/lib`       | librerias compartidas entre usuarios.                         |
 
-
-## Prompt
-
-Cuando abras el emulador de terminal (con `ctrl`+`T`) vas a encontar con algo asi:
-```shell
-usuario@pc:mi_dir$
-```
-
-Esto se conoce como **prompt**, antecede siempre al cursor, y nos da alguna informacion de cual es nuestro estado.
-Lo primero que dice es quien es el usuario que va a ejecutar las instrucciones (*usuario*), luego del **`@`** dice desde que computadora (*pc*), seguido de **`:`** dice el directorio en el que estamos ubicados dentro de *pc*, y por ultimo un signo que indica los privilegios del usuario (**`$`**: usuario normal, **`#`**:superuser/admin).
-El prompt es completamente customizable y por lo tanto es posible encontrar otras estructuras, pero en general por default tienen estos elementos.
 
 ## Navegación
 
@@ -135,7 +139,7 @@ estos ultimos son más antiguos que los simbólicos y tienen algunas limitacione
 ### Inodes
 Para entender la diferencia entre links simbólicos y duros tenemos que saber que los archivos consisten en dos partes: 
 - su contenido, 
-- y su numbre/metadata.
+- y su nombre/metadata.
 
 cuando creamos *hard-links* estamos creando un nombre adicional para un bloque de contenido pre-existente. Tanto el archivo original como el link son indistinguibles ya que son dos formas distintas de nombrar al mismo conjunto de datos. Si borramos el archivo original el link sigue funcionando ya que el contenido no se borra y el link sigue apuntando al bloque datos original.
 
@@ -149,7 +153,6 @@ total 0
 23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 archivo
 23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 link_hard
 23644387 lrwxrwxrwx 1 usuario usuario 7 feb 27 11:10 link_soft -> archivo
-
 ``` 
 
 notar que los links duros y tienen el mismo *inode-number* que su archivo target, pero los links simbólicos no.
@@ -227,19 +230,18 @@ usuario@pc:~$ cat archivo.txt
 hola
 como estás?
 ```
-
 <!-- usuario@pc:~$ read var	#stdin   a variable -->
 <!-- usuario@pc:~$ echo "Hola"	#stdin   a stdout   -->
 
 
 ### Pipelines
 
-Una forma comun de redirigir `stdout` de un comando para usarlo en otro comando es mediante el uso de *pipelines* (`|`):
+Una forma comun de redirigir `stdout` de un comando para usarlo como `stdin` de otro comando es mediante el uso de *pipelines* (`|`):
 
 ```shell
 usuario@pc:~$ ls /usr/bin | sort	 
 ```
-en este ejemplo listamos los archivos presentes en `/usr/bin` y la salida se la pasamos al comando `sort` que ordena en orden alfabético la lista. `sort` en este ejemplo juega el rol *filtro*, ya que toma una salida como *stdout*, la procesa y devuelve una nueva salida. Existen otros filtros, por nombrar algunos de los más usados: `uniq`, `grep`, `wc`, entre otros.
+en este ejemplo listamos los archivos presentes en `/usr/bin` y la salida se la pasamos al comando `sort` que ordena la lista de forma alfrabetica. `sort` en este ejemplo juega el rol *filtro*, ya que toma una salida como *stdout*, la procesa y devuelve una nueva salida. Existen otros filtros, por nombrar algunos de los más usados: `uniq`, `grep`, `wc`, entre otros.
 
 
 Existe un comando frecuentemente usado que toma un *stdout* y lo redirecciona a un archivo y al mismo tiempo a *stdout*, este se llama `tee` :
@@ -267,42 +269,49 @@ usuario@pc:~$ echo "carpeta" | xargs mkdir
 
 Luego de ejecutar un comando ó programa podemos revisar el estado del sistema para ver si se ejcuto correctamente:
 ```shell
-echo $?
+usuario@pc:~$ ls /bin/usr
+usuario@pc:~$ echo $?
 ```
 
+
+---
 
 ## Archivos de texto
-Para ver el contenido de un archivo de texto tenemos varias opciones:
+
+Veamos como podemos manipular archivos que contienen información como texto. Para ver el contenido de un archivo tenemos varias opciones, para archivos cortos la opción más usada es `cat`:
 
 ```shell
-usuario@pc:~$ cat archivo	#muestra todo el contenido como stdout
-usuario@pc:~$ head archivo	#ver primer parte
-usuario@pc:~$ tail archivo	#ver última parte
+usuario@pc:~$ cat archivo.txt	
 ```
 
+cuando el archivo es muy extenso y sólo queremos ver una parte de este podemos usar `head` ó `tail`, estos muestras las primeras y últimas lineas respectivamente:
+
 ```shell
-usuario@pc:~$ more archivo	#solo lectura (viejo)
-usuario@pc:~$ less archivo  	#version moderna de less  ("more is less" xD)
+usuario@pc:~$ head archivo.txt
+usuario@pc:~$ tail archivo.txt
 ```
+
+Para ver el contenido de un archivo de forma interactiva existe el comando `less`, ó su versión precedente `more`:
+```shell
+usuario@pc:~$ less archivo.txt 
+```
+al ejecutarlo se entra a un modo de visualización donde podemos explorar el archivo de forma interactiva, scroleando hacia abaho usando las flechitas, para salir apretamos la tecla `q` de *quit*.
 
 ### Editores de texto
-Si buscamos un editor de texto con más funciones, algunos de los mas conocidos son:
+Si buscamos una herramienta para leer y editar un archivo de texto que contenga más funciones, tenemos varias alternativas:
 
-```shell
-usuario@pc:~$ gedit archivo	#(~ bloc de notas)
-usuario@pc:~$ vim archivo	#(Recomiendo!)
-usuario@pc:~$ nano archivo	#
-usuario@pc:~$ emacs archivo	#
-```
+- `gedit`: es lo más parecido a un bloc de notas de Windows, es fácil de utilizar pero no tiene demasiadas funcionalidades.
+- `vim`, `nano`, `emacs`, etc. : estos son editores con muchas más capacidades.
+
 
 ### Editores *al vuelo*
-Un editor *on the fly* muy utilizado es `sed` (*Stream EDitor*):
+Un editor *on the fly* muy utilizado es `sed` (*Stream EDitor*), este permite realizar cambios u obtener porciones bien especificas del archivo con una escritura muy compacta y performance alta:
 
 ```shell
-usuario@pc:~$ sed 's/ioeu/a/g' archivo	
+usuario@pc:~$ sed 's/[eiou]/a/g' archivo.txt > archivo_nuevo.txt
 ```
 
-<!-- (!) Poner 2 ejemplos más para que se aprecie la utilidad que tiene.. -->
+en este ejemplo reemplazamos todas las vocales presentes en `archivo.txt` por la vocal `a`, y redirigimos el *stdout* al archivo `archivo_nuevo.txt`. 
 
 
 ### Expresiones regulares
@@ -315,6 +324,7 @@ Hay distintos comandos para trabajar con expresiones regulares, el mas conocido 
 usuario@pc:~$ ls | grep "*.txt"	# mostrar archivos terminados en ".txt"
 ```
 
+---
 
 ## Busqueda de archivos
 Hay dos comandos principales para buscar archivos:
@@ -334,28 +344,44 @@ usuario@pc:~$ find <patron> -delete/-ls/-print/-quit
 usuario@pc:~$ find <patron> -delete/-ls/-print/-quit -exec ls -l '{}' ';'
 ```
 
+
+--- 
+
 ## Permisos y usuarios
-Linux es un sistema operativo *multiusuario*, esto significa que muchos usuarios pueden estar utilizando la misma computadora en simultaneo.
-Cada usuario tiene un id, y tiene ciertos privilegios.
+Linux es un sistema operativo *multiusuario*, esto significa que muchos usuarios pueden estar utilizando la misma computadora en simultaneo. Cada usuario tiene un id, pertenece a almenos un grupo y tiene ciertos privilegios.
 
 ```shell
 usuario@pc:~$ id    
 usuario@pc:~$ users 
 usuario@pc:~$ groups
 ```
-
-Para utilizar la terminal como otro usuario:
-
+Para ver cual es nuestra identidad podemos usar `whoami`:
 ```shell
-usuario@pc:~$ su - user2	#ingreso a la cuenta de user2 como si fuese el
-usuario@pc:~$ su user2		#ingreso a la cuenta de user2, pero como user actual
+usuario@pc:~$ whoami
+usuario
 ```
 
-Para realizar operaciones como *super-user*:
+A veces ocurre que no tenemos permisos para ejecutar ciertos comandos, por ejemplo:
 
 ```shell
-usuario@pc:~$ sudo			#ejecutar comando como superuser
+usuario@pc:~$ ./enviar_cohete_a_marte.sh
+bash: ./enviar_cohete_a_marte.sh: permision denied
 ```
+
+con el comando `su` podemos cambiar de identidad al usuario con permiso de ejecución:
+```shell
+usuario@pc:~$ su elon 
+elon@pc:~$ ./enviar_cohete_a_marte.sh
+Enviando cohete...
+elon@pc:~$ 
+```
+
+por razones de seguridad en la actualidad es más común el uso de `sudo`, sobre todo para poder ejecutar comandos en calidad de administrador ó *super-user*:
+
+```shell
+usuario@pc:~$ sudo
+```
+esto es muy útil cuando se quieren instalar programas ó hacer cambios importantes en la configuración de la computadora.
 
 ## Informacion de archivos
 
@@ -381,7 +407,6 @@ El modo queda definido por tres numeros binarios (ó su equivalente hexadecimal)
 | binario  |        | 1 1 1  -  | 0 1 0  - | 1 0 1    | 
 | decimal  |        |   7       |   2      |    5     | 
 
-
 Para modificar el *modo* se utiliza el comando `chmod`, por ejemplo para agregar permiso de ejecución:
 
 ```shell
@@ -394,60 +419,150 @@ usuario@pc:~$ chown archivo.txt	#change owner (propietario)
 usuario@pc:~$ chgrp archivo.txt	#change group 
 ```
 
+
+--- 
+
 ## Procesos
 
 Los sistemas operativos basados en linux son *multi-task*, esto quiere decir que la secuencia de ejecucion de programas la realizan de tal forma que pareciera que se estan realizando multiples tareas en simultaneo (esto es estrictamente asi cuando la computadora posee varias unidades de procesamiento, que hoy en dia es lo más común):
 
-Hay distintos comandos que nos dan informacion de los procesos que se estan ejecutando en la computadora:
+
+### Como funciona un proceso?
+Cuando el sistema se inicia, el kernel inicia sus actividades como procesos y lanza un programa llamado `init`. `init` a su vez ejecuta una serie de scripts (ubicados en `/etc`) llamados *init scripts*, que comienzan los servicios del sistema. Muchos de estos servicios se implementan como *daemons*, estos son programas que estan en las sombras haciendo sus cosas sin interferir con el suario. Por lo que aunque ni estemos logeados el sistema está ocupado haciendo sus cosas rutinarias.
+El hecho de que el programa lance subprogramas se denomina *proceso madre*, produce *procesos hijos*.
+El kernel mantiene información sobre cada proceso para mantener todo organizado. Por ejemplo, a cada proceso se le asigna un numero llamado *process ID* (`PID`). Los PIDs son asignados en orden ascendente donde `init` siempre tiene el valor de 1. El kernel tambien mantiene control de la memoria asignada a cada proceso, asi como su estado para continuar la ejecución. Como los archivos, los procesos también tienen *owners*, *user ID*, y demás.
+
+### Ver procesos
+
+El comando más usado para ver un *snapshot* de los procesos en ejecución es `ps`:
 ```shell
-usuario@pc:~$ ps	      #muestra snapshot de procesos: -A  -s -ef
-usuario@pc:~$ top	      #muestra procesos en tiempo real
-usuario@pc:~$ jobs	      #muestra procesos activos
-usuario@pc:~$ free	      #memoria libre
-usuario@pc:~$ df	      #espacio libre en el disco rigido
+usuario@pc:~$ ps
+    PID TTY          TIME CMD
+ 317940 pts/2    00:00:00 bash
+ 383698 pts/2    00:00:00 ps
+```
+podemos ver que hay dos procesos `bash` y el proceso `ps`, muestra los PID de cada proceso, el `TTY` (*teletype*) que es la terminal desde donde se controla el proceso, el `TIME` es el tiempo de CPU consumido por cada proceso.
+
+Si agregamos el flag `xau` podemos ver los procesos controlados por todos los TTY: 
+```shell
+usuario@pc:~$ ps xau
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0 166792 10852 ?        Ss   10:42   0:02 /sbin/init splash
+root           2  0.0  0.0      0     0 ?        S    10:42   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   10:42   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   10:42   0:00 [rcu_par_gp]
+root           5  0.0  0.0      0     0 ?        I<   10:42   0:00 [slub_flushwq]
+root           6  0.0  0.0      0     0 ?        I<   10:42   0:00 [netns]
+...
+```
+Además de que vemos los procesos de otros TTY (gracias al flag `x`), también vemos que hay más información (gracias a los flags `a` y `u`), tenemos información del `USER` que ejecuta el proceso, el `PID`, el porcentaje de CPU y Memoria que consume, el `RSS` (*Resident Set Size*) es una medida de la memoria RAM utilizada, también podemos ver el estado del proceso `STAT` (donde `R`: running, `S`: sleeping, `T`: Stopped, `Z`: zombie, `N`: low-priority process, etc.), el `TIME` en que fue lanzado y por último el nombre del comando lanzado.
+
+Existen otros comandos para seguir procesos, uno muy utilizado es `top` que permite seguir procesos en tiempo real:
+```shell
+usuario@pc:~$ top
 ```
 
-Para dar/quitar prioridad a un proceso por el resto de los otros:
+### Control de procesos
+
+Ahora que podemos monitorear los procesos intentemos realizar cosas con ellos.
+
+Vamos a lanzar un proceso que simplemente muestra un logo en una ventana emergente llamado `xlogo`:
+
 ```shell
-usuario@pc:~$ bg		#manda proceso al fondo
-usuario@pc:~$ fg		#manda proceso arriba
+usuario@pc:~$ xlogo &
+[1] 420000
+usuario@pc:~$ jobs
+[1]+  Running                 xlogo &
 ```
-Para terminar un proceso:
+
+al usar `&` mandamos directamente el proceso al fondo inmediatamente luego de ejecutarlo. Para traerlo al frente usamos:
+
 ```shell
-usuario@pc:~$ kill <PID>    # mata proceso (PID)  OJOOO CON ESTO!!
-usuario@pc:~$ killall	      #mata proceso por nombre
+usuario@pc:~$ fg %1
 ```
 
-ver pID de proceso bash: `echo $$`
+vamos a ver que la terminal ya no está disponible, para parar el proceso podemos usar `CTRL` + `Z`, veremos que ahora el proceso está parado:
+
+```shell
+[1]   Interrupt               xlogo
+usuario@pc:~$ jobs
+[2]+  Stopped                 xlogo
+```
+
+para volver a inicial el proceso pero en el fondo podemos usar:
+```shell
+usuario@pc:~$ bg %2
+```
+
+Si queremos terminar el proceso podemos traerlo al frente denuevo con `fg %1` y luego matarlo con `CTRL`+`C`.
 
 
-## Señales
+### Señales
 
+Hay una forma más prolija de manejar procesos y esto es mediante el envio de señales con el comando `kill`.
+
+Para terminar un proceso podemos usar `kill`:
+```shell
+usuario@pc:~$ kill <PID>   
+```
+
+además de matar un proceso con `kill` podemos enviar otras señales:
 
 ```shell
 kill [señal] PID
 ```
 
-
 Señales comúnes:
 
+| Num.| Nombre  | Significado                                        |
+|:----|:--------|:---------------------------------------------------|
+| 1   | `HUP`   | Hang up.                                           |
+| 2   | `INT`   | Interrupt. (`CTRL`-`C`)                            |
+| 3   | `QUIT`  | Quit.                                              |
+| 9   | `KILL`  | Kill.                                              |
+| 15  | `TERM`  | Terminate. (default).                              |
+| 18  | `CONT`  | Continue. Restaura proceso luego de una señal STOP.|
+| 19  | `STOP`  | Stop. Pausa sin terminar el proceso.               |
+| 11  | `SEGV`  | Segmentation violation.                            |
+| 20  | `TSTP`  | Terminal stop. (`CTRL`-`Z`)                        |
+| 28  | `WINCH` | Window change.                                     |
 
-| Num.| Nombre | Significado                                        |
-|:----|:-------|:---------------------------------------------------|
-| 1   | ` HUP` | Hang up.                                           |
-| 2   | ` INT` | Interrupt. (CTRL -C)                               |
-| 9   | `KILL` | Kill.                                              |
-| 15  | `TERM` | Terminate. (default).                              |
-| 18  | `CONT` | Continue. Restaura proceso luego de una señal STOP.|
-| 19  | `STOP` | Stop. Pausa sin terminar el proceso.               |
-| 3   | `QUIT` | Quit.                                              |
-| 11  | `SEGV` | Segmentation violation.                            |
-| 20  | `TSTP` | Terminal stop.                                     |
-| 28  |`WINCH` | Window change.                                     |
 
-.
+> Notar que cuando usamos `CTRL`-`C` y `CTRL`-`Z` en realidad lo que estabamos haciendo es enviar las señales de `INT`y `TSTP` respectivamente.
 
-## COMANDOS UTILES:
+
+Aveces queremos eliminar multiples procesos a la vez, esto es posible mediante el uso del comando `killall <nombre_del_programa>`
+
+---
+## Información del sistema
+
+```shell
+usuario@pc:~$ date 	#fecha
+usuario@pc:~$ cal	#calendario cool
+```
+
+
+```shell
+usuario@pc:~$ uname 	#datos del sistema operativo
+usuario@pc:~$ env	#variables de ambiente
+usuario@pc:~$ df 	#                     
+```
+
+
+```shell
+usuario@pc:~$ free	      #memoria libre
+usuario@pc:~$ df	      #espacio libre en el disco rigido
+```
+
+
+
+
+
+
+
+
+---
+## Otros comandos y herramientas útiles
 
 ### Historial de comandos
 Con las flechas de direccion (arriba y abajo) podemos revisar comandos ejecutados anteriormente. 
@@ -497,18 +612,8 @@ usuario@pc:~$ diff archivo1 archivo2	#muestra diferencias entre archivos
 ### Ejecutables/programas 
 ```shell
 usuario@pc:~$ ldd <ejecutable>		#lista las dependencias del ejecutable
-usuario@pc:~$ ./<ejecutable>			#forma típica de ejecución de binarios.
+usuario@pc:~$ ./<ejecutable>		#forma típica de ejecución de binarios.
 ```
-
-### Informacion del sistema
-```shell
-usuario@pc:~$ date 	#fecha
-usuario@pc:~$ cal	#calendario cool
-usuario@pc:~$ uname 	#datos del sistema operativo
-usuario@pc:~$ env	#variables de ambiente
-usuario@pc:~$ df 	#                     
-```
-
 
 
 ## Variables internas:
@@ -553,6 +658,8 @@ usuario@pc:~$ df 	#
 
 ## Expansiones
 
+
+
 ### Brace expansions
 
 ```shell
@@ -574,13 +681,13 @@ echo ${letras[@]}
 
 ```shell
 var="PreHolaPost"
-usuario@ram:~/test$ echo ${var#Pre}
+usuario@pc:~/test$ echo ${var#Pre}
 HolaPost
-usuario@ram:~/test$ echo ${var#Post}
+usuario@pc:~/test$ echo ${var#Post}
 PreHolaPost
-usuario@ram:~/test$ echo ${var%Post}
+usuario@pc:~/test$ echo ${var%Post}
 PreHola
-usuario@ram:~/test$ echo ${var/Hola/CHAU}
+usuario@pc:~/test$ echo ${var/Hola/CHAU}
 PreCHAUPost
 
 ```
