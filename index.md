@@ -4,13 +4,14 @@ title: Introducción a la programación científica
 nositetitle: true
 ---
 
-El objetivo del curso es exponer las bases para el desarrollo de aplicaciones con fines científicos, con enfasis en los aspectos prácticos de su programación e implementación.
+El objetivo del curso es exponer las bases para el desarrollo de aplicaciones computacionales con fines científicos, poniendo enfasis en los aspectos prácticos de su programación e implementación.
 
-No se asume conocimientos previos de programación, por lo que en la primer parte se da una introducción al uso de linea de comando (*shell*), la sintaxis de los lenguajes más utilizados en esta disciplina (`C`, `Fortran`, `Python` y `R`), asi también como herramientas para compilar, desarrollar, debuggear y perfilar programas.
+No se asume conocimientos previos de programación por lo que la primer parte consiste en una introducción al uso de linea de comando (*shell*), luego veremos como trabajar con un sistema de control de cambios (`Git`) y por último revisaremos la sintaxis de los lenguajes más utilizados en esta disciplina (`Python` `R`, y `Fortran`).
 
-El foco del curso está puesto en exponer la sintaxis de programas escritos en C, Fortran, Python y R.
+El foco del curso está puesto en exponer la sintaxis de programas escritos en Python, R y Fortran.
 
-Acá podés encontrár algunas [aplicaciones](./ejemplos/) que trataremos en el curso.
+<!--Acá subiremos algunas [aplicaciones](./ejemplos/) que se mencionan en el curso.-->
+Acá subiremos algo de [material](./material/) para profundizar los temas tratados.
 
 # Programa del curso
 
@@ -20,10 +21,14 @@ Acá podés encontrár algunas [aplicaciones](./ejemplos/) que trataremos en el 
     {% if clase.phony != true %}
       {% if clase.ready %}
         <li>
-        <strong>{{ clase.date | date: 'C%-m.%-d' }}</strong>:
+        <strong>{{ clase.date | date: '%d/%m. ' }}</strong>:
             <a href="{{site.baseurl}}{{ clase.url }}">{{ clase.title }}</a>
         </li>
         {% else %}
+        <li>
+        <strong>{{ clase.date | date: '%d/%m. ' }}</strong>:
+            <a href="">{{ clase.title }}</a>
+        </li>
         {% comment %}
         	 <li>  {{ clase.title }} {% if clase.noclass %}[no class]{% endif %}</li> 
         {%endcomment%}

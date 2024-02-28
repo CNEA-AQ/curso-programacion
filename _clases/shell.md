@@ -433,7 +433,7 @@ Señales comúnes:
 
 
 | Num.| Nombre | Significado                                        |
-|-----|--------|----------------------------------------------------|
+|:----|:-------|:---------------------------------------------------|
 | 1   | ` HUP` | Hang up.                                           |
 | 2   | ` INT` | Interrupt. (CTRL -C)                               |
 | 9   | `KILL` | Kill.                                              |
@@ -445,6 +445,7 @@ Señales comúnes:
 | 20  | `TSTP` | Terminal stop.                                     |
 | 28  |`WINCH` | Window change.                                     |
 
+.
 
 ## COMANDOS UTILES:
 

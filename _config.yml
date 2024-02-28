@@ -19,6 +19,8 @@ collections:
   'clases':
     output: true
   'ejemplos':
+    output: false
+  'material':       
     output: true
 
 # Excludes

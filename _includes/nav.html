@@ -2,7 +2,7 @@
   <nav id="top-nav">
    
    
-        <span class="nav-link"><a href="{{ site.baseurl }}/" id="logo">./sintaxis</a></span>
+        <span class="nav-link"><a href="{{ site.baseurl }}/" id="logo">./home</a></span>
         <span class="nav-link dropdown"><a href="{{ site.baseurl }}/clases">clases</a>
          <div class="dropdown-content">
             {% assign lectures = site['clases'] | sort: 'date' %}
@@ -15,7 +15,8 @@
             {% endfor %}
           </div>
         </span>
-        <span class="nav-link"><a href="{{site.baseurl}}/ejemplos/">ejemplos</a></span>
+        <!--span class="nav-link"><a href="{{site.baseurl}}/ejemplos/">ejemplos</a></span-->
+        <span class="nav-link"><a href="{{site.baseurl}}/material/">material</a></span>
     <!--div class="trigger">         
     <div class="trigger-child">
     </div>
