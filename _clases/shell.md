@@ -2,16 +2,15 @@
 layout: lecture
 title: Shell
 description: Sintaxis básica de shell (bash)
-nav_order: 1
 date: 2024-03-08
 ready: true
 ---
 
-> La *shell* o terminal, es el programa que nos permite interactuar en tiempo real con el sistema operativo atraves de entradas que damos desde el teclado. Casi todos las distribuciones de Linux usan una sintaxis basada en un proyecto GNU llamado **bash** (Bourne-Again SHell) que es una versión sucesora del programa original `sh` para la linea de comandos. En sistemas Mac la sintaxis es casi identica, y Windows la esta empezando a adpotar.
+> La *shell* o terminal, es el programa que nos permite interactuar en tiempo real con el sistema operativo atraves de entradas que damos desde el teclado. Casi todos las distribuciones de Linux usan una sintaxis basada en un proyecto GNU llamado **bash** (*Bourne-Again SHell*) que es una versión sucesora del programa original `sh` para la linea de comandos. En sistemas Mac la sintaxis es casi identica, y Windows la esta empezando a adpotar.
 
 ## Prompt
 
-Cuando abras el emulador de terminal (con `ctrl`+`T`) vas a encontar con algo asi:
+Cuando usamos una interfaz gráfica de usuario (GUI), para interactuar con la *shell* necesitamos un programa intermedio conocido como *emulador de terminal*. Dependiendo el sistema operativo y distribución existen distintos emuladores de terminal. Normalmente hay algún icono de "terminal" ó "consola", pero tambien se puede acceder con alguna combinación de teclas como `CTRL`+`T`. Como sea que se acceda, al abrirlo se despliega una ventana emergente (usualmente de fondo negro), con algo así:
 ```shell
 usuario@pc:mi_dir$
 ```
@@ -23,22 +22,24 @@ El prompt es completamente customizable y por lo tanto es posible encontrar otra
 
 ## Comandos
 
-La *shell* consiste basicamente en una seríe de comandos (que usualmente son programas en C/C++ ya compilados, es decir ejecutables) que están disponibles para el usuario. La mayoria de los comandos tienen la siguiente sintaxis:
+La *shell* consiste basicamente en una seríe de comandos que están disponibles para el usuario. La mayoria de los comandos tienen la siguiente sintaxis:
 
 ```shell
-comando -opciones <argumentos>
+comando -opcion <argumento>
 ```
-donde `comando` es el comando que queremos ejecutar. `-opciones` son opciones de ejecución (tambien llamadas *flags*), y `argumentos` son los argumentos del comando a ejecutar. Por ejemplo:
+donde `comando` es el comando que queremos ejecutar. `-opcion` son opciones de ejecución (tambien llamadas *flags*), y `argumento` son los argumentos del comando a ejecutar. Por ejemplo:
 
 ```shell
 echo -n "Hola"
 ```
 
-acá `echo` es un comando que imprime un mensaje en la pantalla. `-n` es una opción para que el mensaje no termine en linea nueva, y el argumento de este comando es el mensaje en si que se busca mostrar.
+acá `echo` es un comando que imprime un mensaje en la pantalla. `-n` es una opción para que el mensaje no termine en linea nueva, y el argumento de este comando es el mensaje que se quiere mostrar.
+
+> Notar que un comando puede tener ninguno ó multiples *flags*, lo mismo aplica a los argumentos.
 
 ## Comentarios
 
-Los comentarios son partes de código ó comandos que no se ejecutan. En el caso de la *shell* estos están antecedidos del caracter **`#`**, por ejemplo:
+Los comentarios son partes de código ó comandos que no se ejecutan. En el caso de la *shell* estos van precedidos del caracter **`#`**, por ejemplo:
 
 ```shell
 # Esta linea es un comentario
@@ -49,22 +50,32 @@ Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo dema
 
 ## Estructura de directorios en UNIX/Linux
 
+Antes de avanzar veamos como se organizan las carpetas y archivos en el sistema. 
 Los sistemas UNIX suelen tener una estructura de directorios (carpetas) bastante similar entre sí, acá vamos a describir solo algunos:
 
 ![linux-filesystem](./imgs/linux-filesystem.png)
 
 | directorio       | descripción |
 |------------------|-------------|
-| `/`              | Este es el directorio *base* ó *root* del arbol de archivos.  |
-| `/bin`           | Contiene *binarios* ó ejecutables.                            |
-| `/home`          | Contiene directorios base de los usuarios.                    |
-| `/home/<usuario>`| Carpeta donde están todos los archivos del usuario.           |
-| `/lib`           | Contiene librerias del sistema.                               |
-| `/usr`           | Contiene ejecutables, librerias, y archivos copartidos.       |
-| `/usr/bin`       | Archivos binarios compartidos entre usuarios.                 |
-| `/usr/include`   | *headers* compartidos entre usuarios (usados por programas de C/C++). |
-| `/usr/lib`       | librerias compartidas entre usuarios.                         |
-
+| `/`              | directorio *base* ó *root* del arbol de archivos.                             |
+| `/bin`           | contiene *binarios* ó ejecutables indispensables para que el sistema funcione |
+| `/boot`          | contiene archivos necesarios para el arranque del sistema (*boot*).           |
+| `/home`          | contiene directorios base de los usuarios.                                    |
+| `/home/<usuario>`| contiene todos los archivos del usuario "usuario".                            |
+| `/lib`           | contiene librerias del sistema.                                               |
+| `/usr`           | contiene ejecutables, librerias, y archivos copartidos.                       |
+| `/usr/bin`       | Archivos binarios compartidos entre usuarios.                                 |
+| `/usr/include`   | *headers* compartidos entre usuarios (usados por programas de C/C++).         |
+| `/usr/lib`       | librerias compartidas entre usuarios.                                         |
+| `/dev`           | contiene todos los dispositivos (*devices*) del sistema.                      |
+| `/etc`           | contiene archivos de configuración del sistema.                               |
+| `/tmp`           | almacena archivos *temporales*.                                               |
+| `/root`          | es la carpeta base del administrador (ó *root*) del sistema.                  |
+| `/media`         | puntos de acceso a dispositivos removibles (discos externos, pendrives, cd-roms, etc.) |
+| `/mnt`           | puntos de acceso a dispositivos que necesitan ser montados manualmente            | 
+| `/var`           | contiene archivos que son suceptibles a cambiar (variables), bases de datos, etc. | 
+| `/proc`          | contiene archivos que representan los *procesos* activos del sistema.             | 
+| `/opt`           | directorio que contiene software *opcional* instalado.                            | 
 
 ## Navegación
 
@@ -230,8 +241,6 @@ usuario@pc:~$ cat archivo.txt
 hola
 como estás?
 ```
-<!-- usuario@pc:~$ read var	#stdin   a variable -->
-<!-- usuario@pc:~$ echo "Hola"	#stdin   a stdout   -->
 
 
 ### Pipelines
@@ -327,23 +336,34 @@ usuario@pc:~$ ls | grep "*.txt"	# mostrar archivos terminados en ".txt"
 ---
 
 ## Busqueda de archivos
-Hay dos comandos principales para buscar archivos:
 
-El primero es ``locate``, busca archivos por su nombre:
+Existe un comando muy eficiente para encontrar archivos y directorios llamado `find`, cuya sintaxis básica es:
+
 ```shell
-usuario@pc:~$ locate <patron> 	#Busca archivos por nombre en una jerarquia de directorios
+usuario@pc:~$ find <path> 
 ```
 
-El comando ``find`` incorpora otras variables para la busqueda:
+donde `<path>` es la carpeta donde se busca el archivo. Por ejemplo:
 ```shell
-usuario@pc:~$ find <patron>   	#Busca en directorio archivos con patron y los lista.
+usuario@pc:~$ find ~/Desktop 
+```
+
+en este caso `find` va a listar la totalidad de los archivos incluidos en el `~/Desktop` (muchos). 
+
+Para hacer una busqueda más especifica podemos incorporar distintos filtros como `-name`, `-type`, `-size`, por ejemplo si queremos encontrar todos los archivos de tamaño mayor a 2 GB:
+```shell
+usuario@pc:~$ find /home/ -size +2G 
+```
+
+para acotar la busqueda podemos agregar cuantos niveles de directorios 
+
+```shell
 usuario@pc:~$ find <patron> -type d/f/l -size b/c/w/k/M/G -name "pattern"
 usuario@pc:~$ find <patron> \(-type d \) -and/-or/-not  \(-size M  \)
 usuario@pc:~$ find <patron> -type d/f/l -size b/c/w/k/M/G -name "pattern"
 usuario@pc:~$ find <patron> -delete/-ls/-print/-quit
 usuario@pc:~$ find <patron> -delete/-ls/-print/-quit -exec ls -l '{}' ';'
 ```
-
 
 --- 
 
@@ -534,25 +554,72 @@ Señales comúnes:
 Aveces queremos eliminar multiples procesos a la vez, esto es posible mediante el uso del comando `killall <nombre_del_programa>`
 
 ---
+
+
 ## Información del sistema
 
+Vamos a hacer un recorrido sobre algunos comandos que nos permiten extraer información del sistema.
+
+El primero es `uname` que nos da información genérica sobre el sistema operativo:
 ```shell
-usuario@pc:~$ date 	#fecha
-usuario@pc:~$ cal	#calendario cool
+usuario@pc:~$ uname -a
+Linux usuario 6.5.0-21-generic #21~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Feb  9 13:32:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
 
 ```shell
-usuario@pc:~$ uname 	#datos del sistema operativo
-usuario@pc:~$ env	#variables de ambiente
-usuario@pc:~$ df 	#                     
+usuario@pc:~$ date 
+usuario@pc:~$ cal  
 ```
-
 
 ```shell
 usuario@pc:~$ free	      #memoria libre
 usuario@pc:~$ df	      #espacio libre en el disco rigido
 ```
+
+
+
+### Environment
+Durante su ejecución, la *shell* mantiene cierta información sobre la sesión llamado *entorno* ó *environment*. Muchos programas pueden acceder a estos datos para ajustar su comportamiento. 
+
+Para ver que información esta almacenado en el entorno usamos el comando `env`
+```shell
+usuario@pc:~$ env | less
+```
+
+Si queremos conocer el valor de determinadas variables podemos usar `printenv`:
+```shell
+usuario@pc:~$ printenv HOME
+/home/usuario
+```
+
+Otra forma de acceder es usando la notación `$` para ver el valor de las variables con `echo`:
+```shell
+usuario@pc:~$ echo $HOME
+/home/usuario
+```
+
+Cuando nos logeamos al sistema `bash` corre y lee una serie de scripts conocidos *startup files* que definen los valores por defecto del entorno. 
+Los más comunes son los siguientes:
+
+| File              | Contenido                                                |
+| */etc/profile*    | Script global de configuración que aplica a todo usuario |
+| *~/.bash_profile* | Script personal del usuario.                             |
+| *~/.bash_login*   | Se ejecuta en caso que *~/.bash_profile* no se encuentre.|
+| *~/.profile*      | Si los anteriores no se encuentran se ejecuta este.      |
+
+Hay otros *startup files* que se ejecutan cada vez que se abre una sesión en la terminal:
+
+| File              | Contenido                                                |
+| */etc/bash.bashrc*| Script global, aplica a todos los usuarios.              |
+| *~/.bashrc*       | Script personal.                                         |
+
+
+
+
+
+
+
 
 
 
@@ -584,28 +651,46 @@ usuario@pc:~$ man grep	#abre documentación de comando "grep"
 usuario@pc:~$ info grep	#abre información de comando "grep"
 ```
 
+---
+## Compresión de archivos
 
-### Compresión de archivos
-Para comprimir se puede utilizar el programa ``tar``, cuyas opciones principales son ``-c`` para comprimir y ``-x`` para descomprimir. 
+La compresión de datos es el proceso de remover *redundancia* de lso datos.
+Los algoritmos de compresión caen en dos grandes categorías:
+- *Lossless*, preservan la totalidad de los datos originales.
+- *Lossy*, hay perdida de información.
+
+Acá vamos a focalizarnos en herramientas que usan el primer tipo de compresión.
+
+Para comprimir podemos utilizar el programa `tar`, cuyas opciones principales son ``-c`` para comprimir y ``-x`` para descomprimir. 
 ```shell 
 usuario@pc:~$ tar -cvf comprimido.tar.gz carpeta 
 usuario@pc:~$ tar -xzvf comprimido.tar.gz
 ```
 
-### Manejo de paquetes y librerias
+
+
+---
+## Manejo de paquetes y librerias
 ```shell
  apt-get --install <programa>	#instalar programa
 	--update		#actualizar sistema
 	--upgrade		#
 ``` 
 
+
+---
+## Networking
+
+
+<!-- wget, curl, scp, ssh -->
+
+
+
+
+
+
 ### Otros
 ```shell
-usuario@pc:~$ sort lista	#ordena lista de strings
-usuario@pc:~$ uniq lista	#muestra todos los elementos de la lista sin repetirlos
-usuario@pc:~$ split archivo	#divide archivos en partes iguales
-usuario@pc:~$ wc archivo	#cuenta palabras del archivo/bits
-
 usuario@pc:~$ diff archivo1 archivo2	#muestra diferencias entre archivos
 ```
 
@@ -657,15 +742,77 @@ usuario@pc:~$ ./<ejecutable>		#forma típica de ejecución de binarios.
 
 
 ## Expansiones
+Cada vez que tipeamos un comando y apretamos `ENTER`, `bash` realiza una serie de substituciones en el texto antes de enviar el comando. Este proceso de transformación lo llamamos *expansión*.
 
+Por ejemplo si ejecutamos:
+
+```shell
+usuario@pc:$ echo D*
+Desktop Documents Downloads
+```
+ 
+lo que ocurre es que el simbolo `*` significa *cualquier caracter* y por lo tanto *bash* lo interpreta `D*` como la totalidad de archivos disponibles en ese directorio que comienzan con la letra `D`.
 
 
 ### Brace expansions
+Uno de los más interesantes expansiones son los *brace expansions*, por ejemplo:
 
 ```shell
-echo hola_{0..9}_{.txt,.dat}
+usuario@pc:$ echo hola_{0..3}_{.txt,.dat}
+hola_0_.txt hola_0_.dat hola_1_.txt hola_1_.dat hola_2_.txt hola_2_.dat hola_3_.txt hola_3_.dat
 ```
 
+### Expansión aritmética
+La *shell* puede realizar algunas operaciones aritméticas, si encerramos la expresión en `$(( ))`:
+```shell
+usuario@pc:$ echo $(( 2+2 ))
+4
+```
+
+
+### Expansión de parametros
+
+En la *shell* podemos definir ciertos objetos (que llamaremos *variables*) y que almacenan cierta información para ser utilizada por comandos futuros, por ejemplo:
+```shell
+usuario@pc:$ nombre="Juan"
+usuario@pc:$ echo $nombre
+Juan
+usuario@pc:$ 
+```
+todas las variables en *bash* almacenan cadenas de caracteres alfanumericos, o almenos así son interpretados.
+
+El signo `$` nos permite acceder a los valores de estas variables, y es lo que se denomina expansión de parametros ó variables. Si la variable se escribe mal entonces el resultado es vacío:
+```shell
+usuario@pc:$ echo $nmbre
+
+usuario@pc:$ 
+```
+
+
+### Substitución de comandos:
+
+La substitución de comandos nos permite usar la salida de comandos como una expansión:
+```shell
+usuario@pc:$ echo $(ls)
+```
+
+
+### Commillas (*quoting*)
+
+**Comillas dobles**:
+Si agregamos comillas dobles `"` a un comando, todos los caracteres especiales pierdes su significado a excepcion de: el signo de pesos (`$`), la barra invertida (`\`) y el tilde invertido (`), esto quiere decir algunas expansiones son suprimidos, a excepción de: la expansión de parámetros, aritmética y de comandos.
+
+
+**Comillas simples**:
+
+Si queremos suprimir cualquier tipo de expansión usamos comillas simples:
+```shell
+usuario@pc:~$ nombre=Juan
+usuario@pc:~$ echo $nombre
+Juan
+usuario@pc:~$ echo '$nombre'
+$nombre
+```
 
 
 ## Arrays
@@ -698,3 +845,4 @@ PreCHAUPost
 ```shell
 set -x
 ```
+<!-- usuario@pc:~$ read var	#stdin   a variable -->
