@@ -35,7 +35,7 @@ echo -n "Hola"
 
 acá `echo` es un comando que imprime un mensaje en la pantalla. `-n` es una opción para que el mensaje no termine en linea nueva, y el argumento de este comando es el mensaje que se quiere mostrar.
 
-> Notar que un comando puede tener ninguno ó multiples *flags*, lo mismo aplica a los argumentos.
+> &#9888; Notar que un comando puede tener ninguno ó multiples *flags*, lo mismo aplica a los argumentos.
 
 ## Comentarios
 
@@ -50,8 +50,7 @@ Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo dema
 
 ## Estructura de directorios en UNIX/Linux
 
-Antes de avanzar veamos como se organizan las carpetas y archivos en el sistema. 
-Los sistemas UNIX suelen tener una estructura de directorios (carpetas) bastante similar entre sí, acá vamos a describir solo algunos:
+Los sistemas basados en UNIX/Linux usan la filosofía de que *todo es un archivo* (ya veremos cuan cierto es esto), por lo que es muy útil tener una idea de como se organizan los archivos en el sistema. La estructura de carpetas en un sistema Linux tipico es así: 
 
 ![linux-filesystem](./imgs/linux-filesystem.png)
 
@@ -90,7 +89,7 @@ usuario@pc:~$ pwd
 Si queremos ver el contenido de la carpeta donde estamos posicionados escribimos:
 ```shell
 usuario@pc:~$ ls	
-Desktop  Documents  Music  Pictures  Public  Templates Videos
+Desktop  Documents Downloads Music  Pictures  Public  Templates Videos
 ```
 
 Para "ir a" ó "cambiar" de directorio usamos `cd`:
@@ -99,14 +98,14 @@ usuario@pc:~$ cd Desktop
 usuario@pc:~/Desktop$ cd ..
 usuario@pc:~$
 ```
-> Notar que con `cd ..` retornamos al directorio *madre*. 
-> Otro *short-cut* útil es: `cd -` que retorna al directorio de trabajo anterior.
+> &#9888; Notar que con `cd ..` retornamos al directorio *madre*. 
+> &#9888; Otro *short-cut* útil es: `cd -` que retorna al directorio de trabajo anterior.
 
-Para borrar la pantalla de comandos escribimos:
+Para *limpiar* la pantalla de comandos escribimos:
 ```shell
 usuario@pc:~$ clear
 ```
-> una alternativa de `clear` es `<ctl>`+`l`
+> &#9888; una alternativa de `clear` para limpiar es `<CTRL>`+`l`
 
 ## Directorios y archivos
 
@@ -121,34 +120,34 @@ usuario@pc:~$ rm -r carpeta	#elimina directorio y todo su contenido (OJO!)
 
 Para crear/borrar un archivo:
 ```shell
-usuario@pc:~$ touch archivo	#crea archivo/actualiza fecha de acceso
-usuario@pc:~$ rm archivo	#borrar archivo
+usuario@pc:~$ touch archivo.txt	#crea archivo vacio/actualiza fecha de acceso
+usuario@pc:~$ rm archivo.txt	#borrar archivo
 ```
 
 Otras acciones que podemos hacer con directorios y archivos son "copiar", "cortar" (mover) y "pegar":
 ```shell
-usuario@pc:~$ cp archivo archivo_copiado  #copiar archivo 
-usuario@pc:~$ mv archivo archivo_movido   #mover archivo (tambien sirve para renombrar)
+usuario@pc:~$ cp archivo.txt archivo_copiado  #copiar archivo 
+usuario@pc:~$ mv archivo.txt archivo_movido   #mover archivo (tambien sirve para renombrar)
 ```
 
-## Links simbolicos vs duros
+## Links simbolicos y duros
 
-Algo análogo a los "accesos directos" de Windows son los links, y en UNIX los hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
+Algo análogo a los "accesos directos" de Windows son los links, y en Linux los hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
 
 Un link simbólicos se crea así:
 ```shell
-usuario@pc:~$ ln -s archivo link_soft
+usuario@pc:~$ ln -s archivo.txt link_soft
 ```
 
 Un link duro se crea así:
 ```shell
-usuario@pc:~$ ln archivo link_hard 
+usuario@pc:~$ ln archivo.txt link_hard 
 ```
 
 estos ultimos son más antiguos que los simbólicos y tienen algunas limitaciones por lo que se recomienda usar links simbólicos.
 
 ### Inodes
-Para entender la diferencia entre links simbólicos y duros tenemos que saber que los archivos consisten en dos partes: 
+Para entender la diferencia entre links simbólicos y duros podemos imaginar que los archivos consisten en dos partes: 
 - su contenido, 
 - y su nombre/metadata.
 
@@ -161,9 +160,9 @@ Cada archivo tiene un idenitificador único conocido como *inode-number* podemos
 ```shell 
 usuario@pc:~$ ls -li
 total 0
-23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 archivo
+23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 archivo.txt
 23644375 -rw-r--r-- 2 usuario usuario 0 feb 27 11:10 link_hard
-23644387 lrwxrwxrwx 1 usuario usuario 7 feb 27 11:10 link_soft -> archivo
+23644387 lrwxrwxrwx 1 usuario usuario 7 feb 27 11:10 link_soft -> archivo.txt
 ``` 
 
 notar que los links duros y tienen el mismo *inode-number* que su archivo target, pero los links simbólicos no.
@@ -175,15 +174,14 @@ Muchos de los comandos utilizados hasta ahora generan un output de algun tipo. E
 - resultados que el programa esta diseñado a producir (*stdout*)
 - estado y mensajes de error  (*stderr*)
 
-Por ejemplo en linux, `ls` manda sus resultados a un archivo especial `/dev/stdout`, y los mensajes de error a otro llamado `/dev/stderr`. Ambos estan linkeados por default con la pantalla.
+Por ejemplo, `ls` manda sus resultados a un archivo especial `/dev/stdout`, y los mensajes de error a otro llamado `/dev/stderr`. Ambos estan linkeados por default con la pantalla.
 
 Ademas muchos programas toman sus argumentos de un *stdin*, por default linkeado a las entradas desde el teclado.
-
 
 ## Redireccion de `stdout`, `stderr` y `stdin`
 
 Las salidas de los comandos por default van a la pantalla, y los inputs se toman desde el teclado.
-Sin embargo podemos decidir donde llevar los stdin/stdout utilizando comandos de redireccionamiento:
+Sin embargo podemos decidir donde llevar los stdin/stdout utilizando comandos de *redireccionamiento*:
 
 ```shell
 usuario@pc:~$ ls /usr/bin > ls-output.txt
@@ -196,14 +194,14 @@ usuario@pc:~$ cat ls-output.txt
 cada vez que redirecionamos utilizando el simbolo `>` el archivo se borra completamente y sobreescribe el mensaje de salida. Pero es posible tambien redireccionar de forma que se agregue como una nueva linea a un archivo preexistente:
 
 ```shell
-usuario@pc:~$ echo "hola"        >  archivo.txt    #
+usuario@pc:~$ echo "hola"        >  archivo.txt    
 usuario@pc:~$ echo "como estás?" >> archivo.txt    #archivo a archivo (lo agrega)
 usuario@pc:~$ cat archivo.txt
 hola
 como estás?
 ```
 
-Hagamos de nuevo una redirección pero esta vez vamos a ejecutar `ls` sobre un directorio que no existe:
+Hagamos de nuevo una redirección pero esta vez vamos a ejecutar `ls` sobre un directorio que no existe para forzar un mensaje de error:
 ```shell
 usuario@pc:~$ ls /bin/usr > ls-output.txt
 ls: cannot access /bin/usr: No such file or directory
@@ -214,7 +212,7 @@ vemos un mensaje de error, pero ¿Por que se muestra en pantalla y no fue redire
 usuario@pc:~$ ls /bin/usr 2> ls-error.txt
 ```
 
-> Es común ver que los mensajes de error se redireccionan a un archivo especial `/dev/null`, a este archivo (también conocido como *bit bucket*) se envian frecuentemente cualquier mensaje o datos que no nos interesan ni serán usados en el futuro.
+> &#9888; Es común ver que los mensajes de error se redireccionan a un archivo especial `/dev/null`, a este archivo (también conocido como *bit bucket*) se envian frecuentemente cualquier mensaje o datos que no nos interesan ni serán usados en el futuro.
 
 También es posible redireccionar las entradas que damos por teclado (*stdin*):
 ```shell
@@ -234,14 +232,14 @@ como estás?
 
 Como siempre podemos redireccionar esto a un archivo usando el simbolo `>`:
 ```shell
-usuario@pc:~$ cat  > archivo.txt
+usuario@pc:~$ cat > archivo.txt
 hola
 como estás?
 usuario@pc:~$ cat archivo.txt
 hola
 como estás?
 ```
-
+> &#9888; `cat` es frecuentemente usado para concatenar multipls archivos `cat archivo_1.txt archivo_2.txt > archivo_1y2.txt`
 
 ### Pipelines
 
@@ -548,7 +546,7 @@ Señales comúnes:
 | 28  | `WINCH` | Window change.                                     |
 
 
-> Notar que cuando usamos `CTRL`-`C` y `CTRL`-`Z` en realidad lo que estabamos haciendo es enviar las señales de `INT`y `TSTP` respectivamente.
+> &#9888; Notar que cuando usamos `CTRL`-`C` y `CTRL`-`Z` en realidad lo que estabamos haciendo es enviar las señales de `INT`y `TSTP` respectivamente.
 
 
 Aveces queremos eliminar multiples procesos a la vez, esto es posible mediante el uso del comando `killall <nombre_del_programa>`
@@ -681,13 +679,55 @@ usuario@pc:~$ tar -xzvf comprimido.tar.gz
 ---
 ## Networking
 
+### Conceptos previos: 
+- Internet Protocol (IP) adress. Identificador de device en una red.
+- Host and domain Name
+- Uniform Resource Identifier (URI): identifica la ubicación (URL) y nombre (URN) de un recurso en la internet.
+- URL: tiene la siguiente estructura:
+- Puerto: conexion logica usada por programas y servicios para intercambiar información. Puede tomar valores entre 0-65535.
 
-<!-- wget, curl, scp, ssh -->
+```
+{protocolo}://{domainio}:{puerto}/{path}?{query-string}#{fragment}
+```
+- {protocolo}   : http/https/ftp
+- {dominio}     : IP ó nombre de website
+- {path}        : ruta al html o archivo
+- {puerto}      : 80(http), 443(https) y 21(ftp), 25 (email,smtp)
+- {query-string}: variables y valores: "?var1=2&var2=3&...&varN=N".
+- {fragmento}   : seccion de la pagina
 
 
 
+__**ping**__
+`ping` envia un paquete llamado `ICMP ECHO_REQUEST` a cierto *host*. La mayoria de los paginas responden a este paquete permitiendo verificar que la conexión se llevo a cabo con exito.
+
+```shell 
+usuario@pc:$ ping google.com
+```
 
 
+__**traceroute**__
+Permite ver todo el recorrido que realizan los paquetes para establecer conexión con un servidor.
+
+
+__**ip**__
+es un comando multiproposito que reemplaza al comando más antiguo `ifconfig`. 
+<!-- ifconfig -->
+
+
+### Intercambio de archivos en una red:
+
+__**ftp**__,__**lftp**__, __**sftp**__
+
+__**wget**__, __**curl**__
+
+
+### `ssh`
+
+### `scp`
+
+
+---
 
 ### Otros
 ```shell
@@ -768,7 +808,6 @@ La *shell* puede realizar algunas operaciones aritméticas, si encerramos la exp
 usuario@pc:$ echo $(( 2+2 ))
 4
 ```
-
 
 ### Expansión de parametros
 
