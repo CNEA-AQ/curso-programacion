@@ -615,17 +615,6 @@ Hay otros *startup files* que se ejecutan cada vez que se abre una sesión en la
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Otros comandos y herramientas útiles
 
@@ -679,15 +668,27 @@ usuario@pc:~$ tar -xzvf comprimido.tar.gz
 ---
 ## Networking
 
+Una red es un conjunto de computadoras que se cominican entre ellas intercambiando datos.
+
+Esta compuesto por devices (computadoras, impresoras, etc.), un *switch* que conecta todo junto, un *router* (ó gateway), firewall, etc.
+
+
 ### Conceptos previos: 
-- Internet Protocol (IP) adress. Identificador de device en una red.
+- Internet Protocol (IP) address. Identificador de device en una red.
+- Puerto: conexion logica usada por programas y servicios para intercambiar información. Puede tomar valores entre 0-65535.
 - Host and domain Name
 - Uniform Resource Identifier (URI): identifica la ubicación (URL) y nombre (URN) de un recurso en la internet.
-- URL: tiene la siguiente estructura:
-- Puerto: conexion logica usada por programas y servicios para intercambiar información. Puede tomar valores entre 0-65535.
+- Domain Name Service (DNS): Asocia IPs con URLs.
+
+Tipos de redes:
+- LAN (*Local Area Network*)
+- WLAN (*Wireless LAN*)
+- WAN (*Wide Area Network*)
+- VPN (*Virtual Private Network*)
 
 ```
 {protocolo}://{domainio}:{puerto}/{path}?{query-string}#{fragment}
+http://ejemplo.com:80/index.html?nombre=Juan&apellido=Garcia#Introduccion
 ```
 - {protocolo}   : http/https/ftp
 - {dominio}     : IP ó nombre de website
@@ -696,35 +697,92 @@ usuario@pc:~$ tar -xzvf comprimido.tar.gz
 - {query-string}: variables y valores: "?var1=2&var2=3&...&varN=N".
 - {fragmento}   : seccion de la pagina
 
+El sistema abierto de interconección (**OSI**) describe 7 capas que las computadoras usan para comunicarse en una red.
+- Layer 1: Physical
+- Layer 2: Data-link
+- Layer 3: Network
+- Layer 4: Transport
+- Layer 5: Session
+- Layer 6: Presentation
+- Layer 7: Application
 
 
-__**ping**__
+El internet moderno no está basado en **OSI** sino en el modelo **TCP/IP**. Pero OSI sigue siendo usado en muchas redes.
+
+
+
+
+
+### `ip`
+es un comando multiproposito que reemplaza al comando más antiguo `ifconfig`. La sintaxis sigue la siguiente estructura:
+
+```shell
+ip [ OPCIONES ] <OBJETO> <COMANDO>
+```
+
+donde `OBJECTO` puede tomar alguno de estos valores : `address`, `tunnel`,`route`,`vrf`,`xfrm` , entre otros.
+y `COMANDO` es la acción que puede tomar alguno de estos valores: `show`, `add`, `delete`, `list`
+
+Por ejemplo:
+```shell
+usuario@pc:$ ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 50:eb:f6:9f:d9:db brd ff:ff:ff:ff:ff:ff
+    altname enp0s31f6
+3: wlp5s0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 04:56:e5:7a:b1:fb brd ff:ff:ff:ff:ff:ff
+```
+este comando nos da información de la información de la placa de red de nuestra computadora. Podemos usar algunas opciones para filtrar información y mejorar la presentación de los datos:
+```shell
+usuario@pc:$ ip -br address show
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eno1             UP             192.168.48.51/24 fe80::1211:60da:23fc:7e9c/64 
+wlp5s0           DOWN   
+```
+
+
+### `ping`
 `ping` envia un paquete llamado `ICMP ECHO_REQUEST` a cierto *host*. La mayoria de los paginas responden a este paquete permitiendo verificar que la conexión se llevo a cabo con exito.
 
 ```shell 
 usuario@pc:$ ping google.com
 ```
 
-
-__**traceroute**__
-Permite ver todo el recorrido que realizan los paquetes para establecer conexión con un servidor.
-
-
-__**ip**__
-es un comando multiproposito que reemplaza al comando más antiguo `ifconfig`. 
-<!-- ifconfig -->
-
-
 ### Intercambio de archivos en una red:
+
+
+#### `wget`
+Un command muy popular para descargar archivos, tanto de contenido web o sitios ftp es `wget`. Puede descargar archivos especificos ó multiples archivos e incluso el sistio entero. Su uso es muy simple:
+
+```shell
+usuario@pc:% wget example.com
+```
+tiene multiples *flags* para haecer descarga recursiva, filtrar por patrones, elegir la ruta destino, etc.
+
+
+#### `curl`
+
+**REST** (*REpresentational State Transfer*) APIs. Es el tipo más común de API, y es una API con soporte a métodos HTTP/HTTPS:
+
+| `GET`    |              |  
+| `PUT`    |              |  
+| `DELETE` |              |  
+| `POST`   |              |  
+
+
+
 
 __**ftp**__,__**lftp**__, __**sftp**__
 
-__**wget**__, __**curl**__
 
 
-### `ssh`
+### Comunicación segura a clientes remotos 
 
-### `scp`
+####`ssh`
+
+#### `scp`
 
 
 ---
