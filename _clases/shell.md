@@ -47,7 +47,7 @@ Los comentarios son partes de código ó comandos que no se ejecutan. En el caso
 
 Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo demasiado útil en el contexto de la *shell* (pero sí en otros contextos), en este tutorial pueden aparecer así que vale la pena mencionarlo.
 
-
+---
 ## Estructura de directorios en UNIX/Linux
 
 Los sistemas basados en UNIX/Linux usan la filosofía de que *todo es un archivo* (ya veremos cuan cierto es esto), por lo que es muy útil tener una idea de como se organizan los archivos en el sistema. La estructura de carpetas en un sistema Linux tipico es así: 
@@ -76,6 +76,8 @@ Los sistemas basados en UNIX/Linux usan la filosofía de que *todo es un archivo
 | `/proc`          | contiene archivos que representan los *procesos* activos del sistema.             | 
 | `/opt`           | directorio que contiene software *opcional* instalado.                            | 
 
+
+---
 ## Navegación
 
 Veamos como navegar en LINUX, esto es ir de una carpeta a otra y revisar el contenido, etc.
@@ -107,6 +109,7 @@ usuario@pc:~$ clear
 ```
 > &#9888; una alternativa de `clear` para limpiar es `<CTRL>`+`l`
 
+---
 ## Manipular directorios y archivos
 
 Veamos como crear/borrar directorios y archivos:
@@ -130,6 +133,7 @@ usuario@pc:~$ cp archivo.txt archivo_copiado  #copiar archivo
 usuario@pc:~$ mv archivo.txt archivo_movido   #mover archivo (tambien sirve para renombrar)
 ```
 
+---
 ## Links simbolicos y duros
 
 Algo análogo a los "accesos directos" de Windows son los links, y en Linux los hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
@@ -167,7 +171,9 @@ total 0
 
 notar que los links duros y tienen el mismo *inode-number* que su archivo target, pero los links simbólicos no.
 
+![linux-filesystem](./imgs/links.png)
 
+---
 ## Input/Output
 
 Muchos de los comandos utilizados hasta ahora generan un output de algun tipo. Estos outputs consisten en dos tipos:
@@ -178,7 +184,7 @@ Por ejemplo, `ls` manda sus resultados a un archivo especial `/dev/stdout`, y lo
 
 Ademas muchos programas toman sus argumentos de un *stdin*, por default linkeado a las entradas desde el teclado.
 
-## Redireccion de `stdout`, `stderr` y `stdin`
+### Redireccion de `stdout`, `stderr` y `stdin`
 
 Las salidas de los comandos por default van a la pantalla, y los inputs se toman desde el teclado.
 Sin embargo podemos decidir donde llevar los stdin/stdout utilizando comandos de *redireccionamiento*:
@@ -241,7 +247,7 @@ como estás?
 ```
 > &#9888; `cat` es frecuentemente usado para concatenar multipls archivos `cat archivo_1.txt archivo_2.txt > archivo_1y2.txt`
 
-### Pipelines
+#### Pipelines
 
 Una forma comun de redirigir `stdout` de un comando para usarlo como `stdin` de otro comando es mediante el uso de *pipelines* (`|`):
 
@@ -280,9 +286,7 @@ usuario@pc:~$ ls /bin/usr
 usuario@pc:~$ echo $?
 ```
 
-
 ---
-
 ## Trabajar con archivos de texto
 
 Veamos como podemos manipular archivos que contienen información como texto. Para ver el contenido de un archivo tenemos varias opciones, para archivos cortos la opción más usada es `cat`:
@@ -320,6 +324,7 @@ usuario@pc:~$ sed 's/[eiou]/a/g' archivo.txt > archivo_nuevo.txt
 
 en este ejemplo reemplazamos todas las vocales presentes en `archivo.txt` por la vocal `a`, y redirigimos el *stdout* al archivo `archivo_nuevo.txt`. 
 
+> &#9888; Otro editor al vuelo muy poderoso y utilizado es `awk`.
 
 ### Expresiones regulares: `grep`
 
@@ -332,7 +337,6 @@ usuario@pc:~$ ls | grep "*.txt"	# mostrar archivos terminados en ".txt"
 ```
 
 ---
-
 ## Busqueda de archivos: `find`
 
 Existe un comando muy eficiente para encontrar archivos y directorios llamado `find`, cuya sintaxis básica es:
@@ -421,7 +425,7 @@ El modo queda definido por tres numeros binarios (ó su equivalente hexadecimal)
 
 | descr.   | {tipo} |  {user}   | {group}  | {anyone} | 
 |:-------- |:------:|:---------:|:--------:|:--------:| 
-| alphanum |   -    | r w x  -  | - w -  - | r - x    | 
+| alphanum |   d    | r w x  -  | - w -  - | r - x    | 
 | binario  |        | 1 1 1  -  | 0 1 0  - | 1 0 1    | 
 | decimal  |        |   7       |   2      |    5     | 
 
@@ -438,14 +442,13 @@ usuario@pc:~$ chgrp archivo.txt	#change group
 ```
 
 --- 
-
 ## Procesos
 
 Los sistemas operativos basados en linux son *multi-task*, esto quiere decir que la secuencia de ejecucion de programas la realizan de tal forma que pareciera que se estan realizando multiples tareas en simultaneo (esto es estrictamente asi cuando la computadora posee varias unidades de procesamiento, que hoy en dia es lo más común):
 
 
 ### Como funciona un proceso?
-Cuando el sistema se inicia, el kernel inicia sus actividades como procesos y lanza un programa llamado `init`. `init` a su vez ejecuta una serie de scripts (ubicados en `/etc`) llamados *init scripts*, que comienzan los servicios del sistema. Muchos de estos servicios se implementan como *daemons*, estos son programas que estan en las sombras haciendo sus cosas sin interferir con el suario. Por lo que aunque ni estemos logeados el sistema está ocupado haciendo sus cosas rutinarias.
+Cuando el sistema se inicia, el kernel inicia sus actividades como procesos y lanza un programa llamado `init`. `init` a su vez ejecuta una serie de scripts (ubicados en `/etc`) llamados *init scripts*, que comienzan los servicios del sistema. Muchos de estos servicios se implementan como *daemons*, estos son programas que estan en las sombras haciendo sus cosas sin interferir con el usuario. Por lo que aunque ni estemos logeados el sistema está ocupado haciendo sus cosas rutinarias.
 El hecho de que el programa lance subprogramas se denomina *proceso madre*, produce *procesos hijos*.
 El kernel mantiene información sobre cada proceso para mantener todo organizado. Por ejemplo, a cada proceso se le asigna un numero llamado *process ID* (`PID`). Los PIDs son asignados en orden ascendente donde `init` siempre tiene el valor de 1. El kernel tambien mantiene control de la memoria asignada a cada proceso, asi como su estado para continuar la ejecución. Como los archivos, los procesos también tienen *owners*, *user ID*, y demás.
 
@@ -551,7 +554,6 @@ Señales comúnes:
 Aveces queremos eliminar multiples procesos a la vez, esto es posible mediante el uso del comando `killall <nombre_del_programa>`
 
 ---
-
 ## Información del sistema
 
 Vamos a hacer un recorrido sobre algunos comandos que nos permiten extraer información del sistema.
@@ -572,7 +574,6 @@ usuario@pc:~$ cal
 usuario@pc:~$ free	      #memoria libre
 usuario@pc:~$ df	      #espacio libre en el disco rigido
 ```
-
 
 
 ### Environment
@@ -609,8 +610,6 @@ Hay otros *startup files* que se ejecutan cada vez que se abre una sesión en la
 | File              | Contenido                                                |
 | */etc/bash.bashrc*| Script global, aplica a todos los usuarios.              |
 | *~/.bashrc*       | Script personal.                                         |
-
-
 
 
 ---
@@ -677,27 +676,46 @@ usuario@pc:~$ tar -xzvf comprimido.tar.gz
 
 Uno de los aspectos más importantes en la elección de una distribución de Linux es la calidad del sistema de manejo de paquetes y vitalidad de soporte de su comunidad.
 
-Hay dos grandes grupos sistemas de gestión de paquetes:
+En linux todo el software está disponible en internet, y la mayoria de este viene en forma de *paquetes* que provee el desarrollador, en algunos casos solo está disponible el codigo fuente y es necesario compilarlo e instalarlo manualmente.
+
+Los *paquetes* mencionados consisten en una colección de archivos y programas para instalar el software. Además contiene metadatos con la descripción del software, su contenido y dependencias. Estos *paquetes* son creados por lo que se conoce como *package mantainer*, este recibe el codigo fuente lo compila y crea este paquete junto con todos los scripts para adaptarlo al sistema en donde será instalado.
+
+Si bien algunos desarrolladores prefieren crear sus propios paquetes y hacer la distribución de los mismos, lo más común es que los paquetes estén centralizados en *repositorios* mantenidos los que manejan cada distribución del sistema operativo.
+
+Si bien los paquetes contienen un solo programa, muchas veces estos necesitan de la presencia de otros para funcionar, esto se conoce como *dependencia*, y los gestores de paquetes suelen tener algún método para detectarlas e instalarlas también.
+
+En los sistemas Linux, hay dos grandes grupos sistemas de gestión de paquetes:
 
 | Sistema  | Distros que lo usan                     |
 | `.deb`   | Debian, Ubuntu, Mint, Raspbian, etc.    |
 | `.rpm`   | Red-Hat, CentOS, Fedora, OpenSUSE, etc. |
 
+acá vamos a poner el foco en los sistemas de gestion de paquetes tipo *debian* (`.deb`), pero los otros son muy parecidos.
+
+Para la gestión de paquetes hay herramientas de alto y bajo nivel de abstracción, para los primeros existe el comando `apt` (ó `apt-get` en viejas versiones), y para los de bajo nivel tenemos `dpkg`.
 
 ### `apt`
+Esta herramienta permite instalar, desinstalar paquetes:
 ```shell
 usuario@pc:$ apt install <programa>
 usuario@pc:$ apt remove  <programa>
+```
+
+> &#9888; para ejecutar `apt` normalmente se requieren privilegios de administrador, por lo que se ejecuta antecedido por el comando `sudo`.
+
+También `apt` se utiliza para detectar actualizaciones e instalarlas:
+```shell
 usuario@pc:$ apt update		   
 usuario@pc:$ apt upgrade	   
 ```
 
 ### `dpkg`
 ```shell
+usuario@pc:$ dpkg -l       
+usuario@pc:$ dpkg -s      <programa>  
 usuario@pc:$ dpkg install <programa>
 usuario@pc:$ dpkg remove  <programa>
-usuario@pc:$ dpkg update		   
-usuario@pc:$ dpkg upgrade	   
+usuario@pc:$ dpkg purge   <programa>
 ```
 
 
