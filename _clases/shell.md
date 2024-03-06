@@ -107,7 +107,7 @@ usuario@pc:~$ clear
 ```
 > &#9888; una alternativa de `clear` para limpiar es `<CTRL>`+`l`
 
-## Directorios y archivos
+## Manipular directorios y archivos
 
 Veamos como crear/borrar directorios y archivos:
 
@@ -283,7 +283,7 @@ usuario@pc:~$ echo $?
 
 ---
 
-## Archivos de texto
+## Trabajar con archivos de texto
 
 Veamos como podemos manipular archivos que contienen información como texto. Para ver el contenido de un archivo tenemos varias opciones, para archivos cortos la opción más usada es `cat`:
 
@@ -311,7 +311,7 @@ Si buscamos una herramienta para leer y editar un archivo de texto que contenga 
 - `vim`, `nano`, `emacs`, etc. : estos son editores con muchas más capacidades.
 
 
-### Editores *al vuelo*
+### Editores *al vuelo*: `sed`
 Un editor *on the fly* muy utilizado es `sed` (*Stream EDitor*), este permite realizar cambios u obtener porciones bien especificas del archivo con una escritura muy compacta y performance alta:
 
 ```shell
@@ -321,7 +321,7 @@ usuario@pc:~$ sed 's/[eiou]/a/g' archivo.txt > archivo_nuevo.txt
 en este ejemplo reemplazamos todas las vocales presentes en `archivo.txt` por la vocal `a`, y redirigimos el *stdout* al archivo `archivo_nuevo.txt`. 
 
 
-### Expresiones regulares
+### Expresiones regulares: `grep`
 
 Las expresiones regulares son formulas abstractas que representan patrones de texto que tienen cierta estructura. Son muy útiles para buscar (y modificar) secuencias de texto dentro de un archivo que siga determinado patron.
 
@@ -333,7 +333,7 @@ usuario@pc:~$ ls | grep "*.txt"	# mostrar archivos terminados en ".txt"
 
 ---
 
-## Busqueda de archivos
+## Busqueda de archivos: `find`
 
 Existe un comando muy eficiente para encontrar archivos y directorios llamado `find`, cuya sintaxis básica es:
 
@@ -364,7 +364,6 @@ usuario@pc:~$ find <patron> -delete/-ls/-print/-quit -exec ls -l '{}' ';'
 ```
 
 --- 
-
 ## Permisos y usuarios
 Linux es un sistema operativo *multiusuario*, esto significa que muchos usuarios pueden estar utilizando la misma computadora en simultaneo. Cada usuario tiene un id, pertenece a almenos un grupo y tiene ciertos privilegios.
 
@@ -401,6 +400,7 @@ usuario@pc:~$ sudo
 ```
 esto es muy útil cuando se quieren instalar programas ó hacer cambios importantes en la configuración de la computadora.
 
+
 ## Informacion de archivos
 
 ```shell
@@ -436,7 +436,6 @@ Para cambiar de propetiario y grupo de un archivo se utilizan los siguientes com
 usuario@pc:~$ chown archivo.txt	#change owner (propietario)
 usuario@pc:~$ chgrp archivo.txt	#change group 
 ```
-
 
 --- 
 
@@ -515,7 +514,7 @@ usuario@pc:~$ bg %2
 Si queremos terminar el proceso podemos traerlo al frente denuevo con `fg %1` y luego matarlo con `CTRL`+`C`.
 
 
-### Señales
+### Envio de señales: `kill`
 
 Hay una forma más prolija de manejar procesos y esto es mediante el envio de señales con el comando `kill`.
 
@@ -552,7 +551,6 @@ Señales comúnes:
 Aveces queremos eliminar multiples procesos a la vez, esto es posible mediante el uso del comando `killall <nombre_del_programa>`
 
 ---
-
 
 ## Información del sistema
 
@@ -648,21 +646,59 @@ Los algoritmos de compresión caen en dos grandes categorías:
 
 Acá vamos a focalizarnos en herramientas que usan el primer tipo de compresión.
 
-Para comprimir podemos utilizar el programa `tar`, cuyas opciones principales son ``-c`` para comprimir y ``-x`` para descomprimir. 
+Para comprimir uno o varios archivos usamos los comandos: `gzip` y `gunzip`. Cuando `gzip` es ejecutado reemplaza el archivo original por una version comprimida del mismo. `gunzip` restaura el archivo comprimido por el original.
+
+```shell
+usuario@pc:~$ ls -l archivo.txt 
+-rw-rw-r-- 1 usuario usuario 15612 mar  5 23:34 archivo.txt
+usuario@pc:~$ gzip archivo.txt 
+usuario@pc:~$ ls -l archivo.txt.gz 
+-rw-rw-r-- 1 usuario usuario 6589 mar  5 23:34 archivo.txt.gz
+usuario@pc:~$ gunzip archivo.txt 
+```
+
+> &#9888; existen los comandos `bzip2` y `bunzip2` que cumplen la misma función y tienen una sintaxis similar. Simplemente usan un algoritmo de compresion distinto.
+
+
+
+Para archivar documentos podemos utilizar el programa `tar`, cuyas opciones principales son ``-c`` para agrupar archivos y ``-x`` para desagrupar. 
 ```shell 
 usuario@pc:~$ tar -cvf comprimido.tar.gz carpeta 
 usuario@pc:~$ tar -xzvf comprimido.tar.gz
 ```
 
 
+`zip` y `unzip` estos comandos cumplen la doble función de archivar y comprimir.
+
+
 
 ---
 ## Manejo de paquetes y librerias
+
+Uno de los aspectos más importantes en la elección de una distribución de Linux es la calidad del sistema de manejo de paquetes y vitalidad de soporte de su comunidad.
+
+Hay dos grandes grupos sistemas de gestión de paquetes:
+
+| Sistema  | Distros que lo usan                     |
+| `.deb`   | Debian, Ubuntu, Mint, Raspbian, etc.    |
+| `.rpm`   | Red-Hat, CentOS, Fedora, OpenSUSE, etc. |
+
+
+### `apt`
 ```shell
- apt-get --install <programa>	#instalar programa
-	--update		#actualizar sistema
-	--upgrade		#
-``` 
+usuario@pc:$ apt install <programa>
+usuario@pc:$ apt remove  <programa>
+usuario@pc:$ apt update		   
+usuario@pc:$ apt upgrade	   
+```
+
+### `dpkg`
+```shell
+usuario@pc:$ dpkg install <programa>
+usuario@pc:$ dpkg remove  <programa>
+usuario@pc:$ dpkg update		   
+usuario@pc:$ dpkg upgrade	   
+```
 
 
 ---
@@ -708,8 +744,6 @@ El sistema abierto de interconección (**OSI**) describe 7 capas que las computa
 
 
 El internet moderno no está basado en **OSI** sino en el modelo **TCP/IP**. Pero OSI sigue siendo usado en muchas redes.
-
-
 
 
 

@@ -7,6 +7,7 @@ En esta sección se presentan algunos libros y referencias para profundizar los 
 
 ## Command Line / Shell 
 - [The Linux Command Line](https://linuxcommand.org/tlcl.php). William E. Shotts, Jr. 2009. No Starch Press.
+- [UNIX and Linux System Administration Handbook](). Evi Nemeth, Garth Snyder, Trent R. Hein, Ben Whaley. 2010. Prentice Hall.
 
 ## Git
 - [The Missing Semester of Your CS Education (MIT)](https://missing.csail.mit.edu/2020/version-control/)
