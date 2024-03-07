@@ -37,7 +37,68 @@ acá `echo` es un comando que imprime un mensaje en la pantalla. `-n` es una opc
 
 > &#9888; Notar que un comando puede tener ninguno ó multiples *flags*, lo mismo aplica a los argumentos.
 
-## Comentarios
+### Que es exactamente un comando?
+
+Un comando puede ser alguna de las siguients cosas:
+- Un **executable**: Un programa escrito en C/C++ o algún otro lenguaje como Pearl, Python, Ruby, etc.
+- Un **comando interno de bash** (*shel built-in*), son funciones escritas en *bash* que vienen integrados por default en la shell.
+- Una **función de bash**, son funciones de *bash* incorporadas por el usuario al *enviroment* (luego lo veremos en más detalle).
+- Un **alias**, podemos crear *alias* de una función para que se llame como más cómodo nos resulte de recordar.
+
+esta diferenciación no es tan importante, pero si quisieramos saber a que tipo pertenece un comando podemos utilizar el comando `type`:
+```shell
+usuario@pc:~$ type type
+```
+
+Muchas veces nos resulta útil saber cual es la ubicación de un comando, esto se puede conocer con el comando `which`:
+```shell
+usuario@pc:~$ which ls
+```
+
+### Ayuda
+
+Existen en linux varios comandos que nos permiten obtener ayuda ó documentación acerca de un comando, uno de los más comunes es `help`:
+
+```shell
+usuario@pc:~$ help pwd
+```
+
+muchos ejecutables tienen soporte para la opción `--help` que nos muestra una descripción del mismo y como usarlo:
+
+```shell
+usuario@pc:~$ pwd --help
+```
+
+Muchos programas que son desarrollados para servir como comando en la shell suelen contener un archivo de documentación conocido como *manual* ó *man page*. Hay un comando que nos permite acceder a este y se llama `man`:
+```shell
+usuario@pc:~$ man pwd
+```
+un comando similar a `man` es `info`, suele .
+
+Si buscamos una descripción breve de lo que hace el comando también podemos utilizar el comand `whatis`.
+
+Por último, si queremos saber qué comando nos serviría para determinado proposito, para eso puede ser util el comando `apropos`:
+```shell
+usuario@pc:~$ apropos copy
+```
+
+### Historial de comandos
+
+Con el comando `history` podemos ver y revisar los comando ejecutados recientemente.
+
+Una forma alternativa de buscar un comando usado es con las teclas ``<ctrl>+r ``  y escribiendo el patrón de la linea que se desea buscar.
+
+
+### Crear un alias para un comado
+
+A veces deseamos tener un comando que ejecute alguna acción que realizamos frecuentemente, para esto podemos crear un `alias`, por ejemplo:
+```shell
+usuario@pc:~$ alias go_home='cd ~; echo "yendo a casa.."'
+usuario@pc:~$ go_home
+```
+
+
+### Comentarios
 
 Los comentarios son partes de código ó comandos que no se ejecutan. En el caso de la *shell* estos van precedidos del caracter **`#`**, por ejemplo:
 
@@ -47,8 +108,12 @@ Los comentarios son partes de código ó comandos que no se ejecutan. En el caso
 
 Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo demasiado útil en el contexto de la *shell* (pero sí en otros contextos), en este tutorial pueden aparecer así que vale la pena mencionarlo.
 
+
 ---
-## Estructura de directorios en UNIX/Linux
+---
+## Navegación
+
+### Estructura de directorios en UNIX/Linux
 
 Los sistemas basados en UNIX/Linux usan la filosofía de que *todo es un archivo* (ya veremos cuan cierto es esto), por lo que es muy útil tener una idea de como se organizan los archivos en el sistema. La estructura de carpetas en un sistema Linux tipico es así: 
 
@@ -77,8 +142,7 @@ Los sistemas basados en UNIX/Linux usan la filosofía de que *todo es un archivo
 | `/opt`           | directorio que contiene software *opcional* instalado.                            | 
 
 
----
-## Navegación
+### Moverse en el sistema de archivos y ver contenido
 
 Veamos como navegar en LINUX, esto es ir de una carpeta a otra y revisar el contenido, etc.
 
@@ -109,6 +173,7 @@ usuario@pc:~$ clear
 ```
 > &#9888; una alternativa de `clear` para limpiar es `<CTRL>`+`l`
 
+
 ---
 ## Manipular directorios y archivos
 
@@ -133,8 +198,7 @@ usuario@pc:~$ cp archivo.txt archivo_copiado  #copiar archivo
 usuario@pc:~$ mv archivo.txt archivo_movido   #mover archivo (tambien sirve para renombrar)
 ```
 
----
-## Links simbolicos y duros
+### Links simbolicos y duros
 
 Algo análogo a los "accesos directos" de Windows son los links, y en Linux los hay de dos tipos: simbólicos (*symlink*) y duros (*hard-links*)
 
@@ -173,6 +237,7 @@ notar que los links duros y tienen el mismo *inode-number* que su archivo target
 
 ![linux-filesystem](./imgs/links.png)
 
+
 ---
 ## Input/Output
 
@@ -183,6 +248,7 @@ Muchos de los comandos utilizados hasta ahora generan un output de algun tipo. E
 Por ejemplo, `ls` manda sus resultados a un archivo especial `/dev/stdout`, y los mensajes de error a otro llamado `/dev/stderr`. Ambos estan linkeados por default con la pantalla.
 
 Ademas muchos programas toman sus argumentos de un *stdin*, por default linkeado a las entradas desde el teclado.
+
 
 ### Redireccion de `stdout`, `stderr` y `stdin`
 
@@ -302,7 +368,7 @@ usuario@pc:~$ head archivo.txt
 usuario@pc:~$ tail archivo.txt
 ```
 
-Para ver el contenido de un archivo de forma interactiva existe el comando `less`, ó su versión precedente `more`:
+Para ver el contenido de un archivo de forma interactiva existe el comando `less` (ó su versión precesor `more`):
 ```shell
 usuario@pc:~$ less archivo.txt 
 ```
@@ -328,13 +394,28 @@ en este ejemplo reemplazamos todas las vocales presentes en `archivo.txt` por la
 
 ### Expresiones regulares: `grep`
 
-Las expresiones regulares son formulas abstractas que representan patrones de texto que tienen cierta estructura. Son muy útiles para buscar (y modificar) secuencias de texto dentro de un archivo que siga determinado patron.
+Las expresiones regulares son formulas abstractas que representan un conjunto de secuencias de texto que satisfacen un patrón. Por ejemplo, la expresión regular `+54 11 ####-####` representa al conjunto de los numeros de telefono de CABA Argentina, siendo `#` un numero entero entre 0 y 9. 
 
-Hay distintos comandos para trabajar con expresiones regulares, el mas conocido es ``grep``:
+Las expresiones regulares se utilizan mucho en el procesamiento de tetos, para realizar busquedas, extraer información, reemplazar patrones, validar datos, entre otras cosas.
+
+La shell contiene distintos comandos para trabajar con expresiones regulares, el más popular es ``grep``, por ejemplo:
 
 ```shell
-usuario@pc:~$ ls | grep "*.txt"	# mostrar archivos terminados en ".txt"
+usuario@pc:~$ ls | grep ".txt"	
 ```
+
+en este ejemplo, `grep` filtró de los archivos listados en `ls`, aquellos cuyo nombre termine en `.txt`. El simbolo `.` en este caso representa "cualquier caracter alfanumérico". Grep hace uso de estos *caracteres especiales* (llamados *wildcards*) para representar patrones, otros caracteres especiales que podemos encontrar son:
+
+|simbolo| significado (en `grep -E`)                             |
+|-------|---------------------------------------------------     |
+| `*`   | 0 ó más ocurrencias del caracter precedente.           | 
+| `+`   | 1 ó más ocurrencial del caracter precedente.           | 
+| `?`   | 0 ó 1 ocurrencia del caracter precedente.              | 
+| `[]`  | 1 ocurrencia del conjunto de caracteres dentro de [].  | 
+| `[^]` | complemento de [].                                     | 
+| `|`   | operador "OR" (unión)                                  | 
+
+> &#9888; OJO! en otros comandos y contextos el significado de `*`, `.` y el resto de los simbolos puede cambiar.
 
 ---
 ## Busqueda de archivos: `find`
@@ -407,27 +488,33 @@ esto es muy útil cuando se quieren instalar programas ó hacer cambios importan
 
 ## Informacion de archivos
 
+Como ya dijimos Linux sigue la idea de que *todo es un archivo*, pero aún así hay muchos tipos de archivos y formatos, algunos nos resultan familiares como MP3, JPEG, pero otros pueden ser más extraños. Hay un comando que nos permite ver a que tipo pertenece un archivo:
 ```shell
-usuario@pc:~$ file <archivo>	#te muestra tipo de archivo
-usuario@pc:~$ stat <archivo>  	#te muestra el estado del archivo
+usuario@pc:~$ file <archivo>
 ```
 
-Si llamamos a `ls -l` vemos que lista los archvivos en el directorio presente, por ejemplo:
+también existen comandos que nos dan información sobre un archivo:
+```shell
+usuario@pc:~$ stat <archivo>
+```
+
+Usemoa a nuestro viejo amigo `ls` pero con la opción `-l`. Vamos a ver que lista los archivos en el directorio presente pero con bastante información adicional, por ejemplo:
 ```shell
 usuario@pc:~$ ls -l
 drwxr-xr-x  8 usuario usuario    69632 may 19 22:55  Desktop
 -rw-r--r--  1 usuario usuario     8980 abr  9 12:03  examples.desktop
 lrwxrwxrwx  1 usuario usuario       15 may 27 14:43  dni.pdf -> Desktop/dni.pdf
 ```
-La primer secencia de 10 letras y guíones describe el tipo de archivo (primer letra, **d**: directorio, **l**: link, **-** otro.) y el modo ó permisos para usar de cada arcihvo ó directorio (últimos 9 caracteréres, donde: **r**: permiso de lectura, **w**: permiso de escritura, **x**: permiso de ejecucion
 
-El modo queda definido por tres numeros binarios (ó su equivalente hexadecimal). Por ejemplo `Desktop` tiene modo 111 101 101 (es decir: 755) y `examples.desktop` tiene modo 110 100 100 (es decir 644). La forma de leerlo es:
+Prestemos atención a los primeros 10 caracteres de cada linea. La primer letra describe el tipo de archivo (**d**: directorio, **l**: link, **-** otro.) lo últimos 9 caracteres nos dicen el modo ó permisos de uso del arcihvo ó directorio (donde: **r**: permiso de lectura, **w**: permiso de escritura, **x**: permiso de ejecucion.
 
-| descr.   | {tipo} |  {user}   | {group}  | {anyone} | 
-|:-------- |:------:|:---------:|:--------:|:--------:| 
-| alphanum |   d    | r w x  -  | - w -  - | r - x    | 
-| binario  |        | 1 1 1  -  | 0 1 0  - | 1 0 1    | 
-| decimal  |        |   7       |   2      |    5     | 
+El modo queda definido por tres numeros binarios (ó su equivalente decimal). Por ejemplo `Desktop` tiene modo d 111 101 101 (es decir: 755) y `examples.desktop` tiene modo - 110 100 100 (es decir 644). La forma de leerlo es:
+
+| descr.   | {tipo} |  {user}  | {group} | {anyone} | 
+|:-------- |:------:|:--------:|:-------:|:--------:| 
+| alphanum |   d    | r w x    | - w -   |  r - x   | 
+| binario  |        | 1 1 1    | 0 1 0   |  1 0 1   | 
+| decimal  |        |   7      |   2     |     5    | 
 
 Para modificar el *modo* se utiliza el comando `chmod`, por ejemplo para agregar permiso de ejecución:
 
@@ -445,7 +532,6 @@ usuario@pc:~$ chgrp archivo.txt	#change group
 ## Procesos
 
 Los sistemas operativos basados en linux son *multi-task*, esto quiere decir que la secuencia de ejecucion de programas la realizan de tal forma que pareciera que se estan realizando multiples tareas en simultaneo (esto es estrictamente asi cuando la computadora posee varias unidades de procesamiento, que hoy en dia es lo más común):
-
 
 ### Como funciona un proceso?
 Cuando el sistema se inicia, el kernel inicia sus actividades como procesos y lanza un programa llamado `init`. `init` a su vez ejecuta una serie de scripts (ubicados en `/etc`) llamados *init scripts*, que comienzan los servicios del sistema. Muchos de estos servicios se implementan como *daemons*, estos son programas que estan en las sombras haciendo sus cosas sin interferir con el usuario. Por lo que aunque ni estemos logeados el sistema está ocupado haciendo sus cosas rutinarias.
@@ -475,6 +561,7 @@ root           5  0.0  0.0      0     0 ?        I<   10:42   0:00 [slub_flushwq
 root           6  0.0  0.0      0     0 ?        I<   10:42   0:00 [netns]
 ...
 ```
+
 Además de que vemos los procesos de otros TTY (gracias al flag `x`), también vemos que hay más información (gracias a los flags `a` y `u`), tenemos información del `USER` que ejecuta el proceso, el `PID`, el porcentaje de CPU y Memoria que consume, el `RSS` (*Resident Set Size*) es una medida de la memoria RAM utilizada, también podemos ver el estado del proceso `STAT` (donde `R`: running, `S`: sleeping, `T`: Stopped, `Z`: zombie, `N`: low-priority process, etc.), el `TIME` en que fue lanzado y por último el nombre del comando lanzado.
 
 Existen otros comandos para seguir procesos, uno muy utilizado es `top` que permite seguir procesos en tiempo real:
@@ -577,6 +664,7 @@ usuario@pc:~$ df	      #espacio libre en el disco rigido
 
 
 ### Environment
+
 Durante su ejecución, la *shell* mantiene cierta información sobre la sesión llamado *entorno* ó *environment*. Muchos programas pueden acceder a estos datos para ajustar su comportamiento. 
 
 Para ver que información esta almacenado en el entorno usamos el comando `env`
@@ -612,28 +700,8 @@ Hay otros *startup files* que se ejecutan cada vez que se abre una sesión en la
 | *~/.bashrc*       | Script personal.                                         |
 
 
----
-## Otros comandos y herramientas útiles
 
-### Historial de comandos
-Con las flechas de direccion (arriba y abajo) podemos revisar comandos ejecutados anteriormente. 
-Una forma de ver todo lo que fue ejecutado en la terminal abrierta es con el comando:``history``.
-Podemos buscar lineas ejecutadas anteriormente aprentando ``<ctl>+r ``  y escribiendo el patron que se desea buscar.
 
-### Ayuda 	
-```shell
-usuario@pc:~$ help
-usuario@pc:~$ <comando> --help
-usuario@pc:~$ help grep	#informacion sobre uso del comando
- 
-usuario@pc:~$ whatis grep	#te dice que es es el comando
-usuario@pc:~$ type grep	#te dice que tipo de comando es
-usuario@pc:~$ which grep	#te dice donde se ubica el comando
-usuario@pc:~$ apropos copy	#busca una funcion apropiada para "copy"
- 
-usuario@pc:~$ man grep	#abre documentación de comando "grep"
-usuario@pc:~$ info grep	#abre información de comando "grep"
-```
 
 ---
 ## Compresión de archivos
@@ -659,7 +727,6 @@ usuario@pc:~$ gunzip archivo.txt
 > &#9888; existen los comandos `bzip2` y `bunzip2` que cumplen la misma función y tienen una sintaxis similar. Simplemente usan un algoritmo de compresion distinto.
 
 
-
 Para archivar documentos podemos utilizar el programa `tar`, cuyas opciones principales son ``-c`` para agrupar archivos y ``-x`` para desagrupar. 
 ```shell 
 usuario@pc:~$ tar -cvf comprimido.tar.gz carpeta 
@@ -668,8 +735,6 @@ usuario@pc:~$ tar -xzvf comprimido.tar.gz
 
 
 `zip` y `unzip` estos comandos cumplen la doble función de archivar y comprimir.
-
-
 
 ---
 ## Manejo de paquetes y librerias
@@ -824,8 +889,6 @@ tiene multiples *flags* para haecer descarga recursiva, filtrar por patrones, el
 | `POST`   |              |  
 
 
-
-
 __**ftp**__,__**lftp**__, __**sftp**__
 
 
@@ -855,18 +918,18 @@ usuario@pc:~$ ./<ejecutable>		#forma típica de ejecución de binarios.
 
 | Variable   |	Details |
 |------------|----------|
-| `$*` /`$@`      | Function/script positional parameters (arguments). Expand as follows:
-|                 | `$*` and `$@` are the same as $1 $2 ... (note that it generally makes no sense to leave those unquoted)
-|                 | `$*` is the same as "$1 $2 ..." 1
-|                 | `$@` is the same as "$1" "$2" ...
-|                 |  1. Arguments are separated by the first character of $IFS, which does not have to be a space.
-| `$#	          | Number of positional parameters passed to the script or function
-| `$!	          | Process ID of the last (righ-most for pipelines) command in the most recently job put into the background (note that it's not necessarily the same as the job's process group ID when job control is enabled)
-| `$$`	          | ID of the process that executed bash
-| `$?`	          | Exit status of the last command
-| `$n`	          | Positional parameters, where n=1, 2, 3, ..., 9
-| `${n}`          | Positional parameters (same as above), but n can be > 9
-| `$0`            | In scripts, path with which the script was invoked; with bash -c 'printf "%s\n" "$0"' name args': name (the first argument after the inline script), otherwise, the argv[0] that bash received.
+| `$*` /`$@` | Function/script positional parameters (arguments). Expand as follows:
+|            | `$*` and `$@` are the same as $1 $2 ... (note that it generally makes no sense to leave those unquoted)
+|            | `$*` is the same as "$1 $2 ..." 1
+|            | `$@` is the same as "$1" "$2" ...
+|            |  1. Arguments are separated by the first character of $IFS, which does not have to be a space.
+| `$#`       | Number of positional parameters passed to the script or function
+| `$!` 	     | Process ID of the last (righ-most for pipelines) command in the most recently job put into the background (note that it's not necessarily the same as the job's process group ID when job control is enabled)
+| `$$`	     | ID of the process that executed bash
+| `$?`	     | Exit status of the last command
+| `$n`	     | Positional parameters, where n=1, 2, 3, ..., 9
+| `${n}`     | Positional parameters (same as above), but n can be > 9
+| `$0`       | In scripts, path with which the script was invoked; with bash -c 'printf "%s\n" "$0"' name args': name (the first argument after the inline script), otherwise, the argv[0] that bash received.
 | `$_`	          | Last field of the last command
 | `$IFS`          | Internal field separator
 | `$PATH`         | PATH environment variable used to look-up executables
@@ -891,11 +954,11 @@ usuario@pc:~$ ./<ejecutable>		#forma típica de ejecución de binarios.
 
 
 
+---
 ## Expansiones
 Cada vez que tipeamos un comando y apretamos `ENTER`, `bash` realiza una serie de substituciones en el texto antes de enviar el comando. Este proceso de transformación lo llamamos *expansión*.
 
 Por ejemplo si ejecutamos:
-
 ```shell
 usuario@pc:$ echo D*
 Desktop Documents Downloads
@@ -948,9 +1011,8 @@ usuario@pc:$ echo $(ls)
 
 ### Commillas (*quoting*)
 
-**Comillas dobles**:
+**Comillas dobles**
 Si agregamos comillas dobles `"` a un comando, todos los caracteres especiales pierdes su significado a excepcion de: el signo de pesos (`$`), la barra invertida (`\`) y el tilde invertido (`), esto quiere decir algunas expansiones son suprimidos, a excepción de: la expansión de parámetros, aritmética y de comandos.
-
 
 **Comillas simples**:
 
@@ -963,7 +1025,7 @@ usuario@pc:~$ echo '$nombre'
 $nombre
 ```
 
-
+---
 ## Arrays
 ```shell
 letras=("a", "b", "c")
@@ -985,12 +1047,12 @@ usuario@pc:~/test$ echo ${var%Post}
 PreHola
 usuario@pc:~/test$ echo ${var/Hola/CHAU}
 PreCHAUPost
-
 ```
 
+---
+## Otros comandos y herramientas útiles
 
-##  `set`
-
+###  `set`
 ```shell
 set -x
 ```
