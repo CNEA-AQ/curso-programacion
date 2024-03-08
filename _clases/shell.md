@@ -10,7 +10,7 @@ ready: true
 
 ## Prompt
 
-Cuando usamos una interfaz gráfica de usuario (GUI), para interactuar con la *shell* necesitamos un programa intermedio conocido como *emulador de terminal*. Dependiendo el sistema operativo y distribución existen distintos emuladores de terminal. Normalmente hay algún icono de "terminal" ó "consola", pero tambien se puede acceder con alguna combinación de teclas como `CTRL`+`T`. Como sea que se acceda, al abrirlo se despliega una ventana emergente (usualmente de fondo negro), con algo así:
+Cuando usamos una interfaz gráfica de usuario (GUI), para interactuar con la *shell* necesitamos un programa intermedio conocido como *emulador de terminal*. Dependiendo el sistema operativo y distribución existen distintos emuladores de terminal. Normalmente hay algún icono de "terminal" ó "consola", pero tambien se puede acceder con alguna combinación de teclas como `ctrl`+`alt`+`T`. Como sea que se acceda, al abrirlo se despliega una ventana emergente (usualmente de fondo negro), con algo así:
 ```shell
 usuario@pc:mi_dir$
 ```
@@ -238,6 +238,19 @@ notar que los links duros y tienen el mismo *inode-number* que su archivo target
 ![linux-filesystem](./imgs/links.png)
 
 
+
+### Informacion de archivos
+
+Como ya dijimos Linux sigue la idea de que *todo es un archivo*, pero aún así hay muchos tipos de archivos y formatos, algunos nos resultan familiares como MP3, JPEG, pero otros pueden ser más extraños. Hay un comando que nos permite ver a que tipo pertenece un archivo:
+```shell
+usuario@pc:~$ file <archivo>
+```
+
+también existen comandos que nos dan información sobre un archivo:
+```shell
+usuario@pc:~$ stat <archivo>
+```
+
 ---
 ## Input/Output
 
@@ -438,7 +451,7 @@ Para hacer una busqueda más especifica podemos incorporar distintos filtros com
 usuario@pc:~$ find /home/ -size +2G 
 ```
 
-para acotar la busqueda podemos agregar cuantos niveles de directorios 
+para acotar la busqueda podemos agregar cuantos niveles de directorios con los flags `-maxdepth`.
 
 ```shell
 usuario@pc:~$ find <patron> -type d/f/l -size b/c/w/k/M/G -name "pattern"
@@ -450,6 +463,7 @@ usuario@pc:~$ find <patron> -delete/-ls/-print/-quit -exec ls -l '{}' ';'
 
 --- 
 ## Permisos y usuarios
+
 Linux es un sistema operativo *multiusuario*, esto significa que muchos usuarios pueden estar utilizando la misma computadora en simultaneo. Cada usuario tiene un id, pertenece a almenos un grupo y tiene ciertos privilegios.
 
 ```shell
@@ -463,42 +477,10 @@ usuario@pc:~$ whoami
 usuario
 ```
 
-A veces ocurre que no tenemos permisos para ejecutar ciertos comandos, por ejemplo:
+### Acceso: lectura, escritura y ejecución
 
-```shell
-usuario@pc:~$ ./enviar_cohete_a_marte.sh
-bash: ./enviar_cohete_a_marte.sh: permision denied
-```
-
-con el comando `su` podemos cambiar de identidad al usuario con permiso de ejecución:
-```shell
-usuario@pc:~$ su elon 
-elon@pc:~$ ./enviar_cohete_a_marte.sh
-Enviando cohete...
-elon@pc:~$ 
-```
-
-por razones de seguridad en la actualidad es más común el uso de `sudo`, sobre todo para poder ejecutar comandos en calidad de administrador ó *super-user*:
-
-```shell
-usuario@pc:~$ sudo
-```
-esto es muy útil cuando se quieren instalar programas ó hacer cambios importantes en la configuración de la computadora.
-
-
-## Informacion de archivos
-
-Como ya dijimos Linux sigue la idea de que *todo es un archivo*, pero aún así hay muchos tipos de archivos y formatos, algunos nos resultan familiares como MP3, JPEG, pero otros pueden ser más extraños. Hay un comando que nos permite ver a que tipo pertenece un archivo:
-```shell
-usuario@pc:~$ file <archivo>
-```
-
-también existen comandos que nos dan información sobre un archivo:
-```shell
-usuario@pc:~$ stat <archivo>
-```
-
-Usemoa a nuestro viejo amigo `ls` pero con la opción `-l`. Vamos a ver que lista los archivos en el directorio presente pero con bastante información adicional, por ejemplo:
+El acceso a archivos o directorios se definen en terminos de acceso a la lectura, escritura y ejecución. 
+Para ver como esto funciona analicemos la salida del comando `ls -l`:
 ```shell
 usuario@pc:~$ ls -l
 drwxr-xr-x  8 usuario usuario    69632 may 19 22:55  Desktop
@@ -527,6 +509,34 @@ Para cambiar de propetiario y grupo de un archivo se utilizan los siguientes com
 usuario@pc:~$ chown archivo.txt	#change owner (propietario)
 usuario@pc:~$ chgrp archivo.txt	#change group 
 ```
+
+### Cambio de idenidades
+
+A veces ocurre que queremos leer, escribir ó ejecutar un archivo pero no tenemos los permisos correspondientes, por ejemplo:
+
+```shell
+usuario@pc:~$ ./enviar_cohete_a_marte.sh
+bash: ./enviar_cohete_a_marte.sh: permision denied
+```
+
+con el comando `su` podemos cambiar de identidad para ejcutarlo como su propietario:
+```shell
+usuario@pc:~$ su elon 
+elon@pc:~$ ./enviar_cohete_a_marte.sh
+Enviando cohete...
+elon@pc:~$ 
+```
+
+por razones de seguridad en la actualidad es más común el uso de `sudo`, sobre todo para poder ejecutar comandos en calidad de administrador ó *super-user*:
+
+```shell
+usuario@pc:~$ sudo --user=elon ./enviar_cohete_a_marte.sh
+```
+esto es muy útil cuando se quieren instalar programas ó hacer cambios importantes en la configuración de la computadora.
+
+> &#9888; Si no especificamos el `--user` asume que queremos ser *root*.
+> &#9888; `sudo` solo permite ejecutar un comando a la vez.
+
 
 --- 
 ## Procesos
@@ -588,7 +598,7 @@ al usar `&` mandamos directamente el proceso al fondo inmediatamente luego de ej
 usuario@pc:~$ fg %1
 ```
 
-vamos a ver que la terminal ya no está disponible, para parar el proceso podemos usar `CTRL` + `Z`, veremos que ahora el proceso está parado:
+vamos a ver que la terminal ya no está disponible, para parar el proceso podemos usar `ctrl` + `Z`, veremos que ahora el proceso está parado:
 
 ```shell
 [1]   Interrupt               xlogo
@@ -601,7 +611,7 @@ para volver a inicial el proceso pero en el fondo podemos usar:
 usuario@pc:~$ bg %2
 ```
 
-Si queremos terminar el proceso podemos traerlo al frente denuevo con `fg %1` y luego matarlo con `CTRL`+`C`.
+Si queremos terminar el proceso podemos traerlo al frente denuevo con `fg %1` y luego matarlo con `ctrl`+`C`.
 
 
 ### Envio de señales: `kill`
@@ -616,26 +626,26 @@ usuario@pc:~$ kill <PID>
 además de matar un proceso con `kill` podemos enviar otras señales:
 
 ```shell
-kill [señal] PID
+kill -s [señal] PID
 ```
 
 Señales comúnes:
 
-| Num.| Nombre  | Significado                                        |
+| Num.| Señal   | Significado                                        |
 |:----|:--------|:---------------------------------------------------|
 | 1   | `HUP`   | Hang up.                                           |
-| 2   | `INT`   | Interrupt. (`CTRL`-`C`)                            |
+| 2   | `INT`   | Interrupt. (`ctrl`-`C`)                            |
 | 3   | `QUIT`  | Quit.                                              |
 | 9   | `KILL`  | Kill.                                              |
 | 15  | `TERM`  | Terminate. (default).                              |
 | 18  | `CONT`  | Continue. Restaura proceso luego de una señal STOP.|
 | 19  | `STOP`  | Stop. Pausa sin terminar el proceso.               |
 | 11  | `SEGV`  | Segmentation violation.                            |
-| 20  | `TSTP`  | Terminal stop. (`CTRL`-`Z`)                        |
+| 20  | `TSTP`  | Terminal stop. (`ctrl`-`Z`)                        |
 | 28  | `WINCH` | Window change.                                     |
 
 
-> &#9888; Notar que cuando usamos `CTRL`-`C` y `CTRL`-`Z` en realidad lo que estabamos haciendo es enviar las señales de `INT`y `TSTP` respectivamente.
+> &#9888; Notar que cuando usamos `ctrl`-`C` y `ctrl`-`Z` en realidad lo que estabamos haciendo es enviar las señales de `INT`y `TSTP` respectivamente.
 
 
 Aveces queremos eliminar multiples procesos a la vez, esto es posible mediante el uso del comando `killall <nombre_del_programa>`
@@ -650,7 +660,6 @@ El primero es `uname` que nos da información genérica sobre el sistema operati
 usuario@pc:~$ uname -a
 Linux usuario 6.5.0-21-generic #21~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Feb  9 13:32:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 ```
-
 
 ```shell
 usuario@pc:~$ date 
@@ -700,9 +709,6 @@ Hay otros *startup files* que se ejecutan cada vez que se abre una sesión en la
 | *~/.bashrc*       | Script personal.                                         |
 
 
-
-
-
 ---
 ## Compresión de archivos
 
@@ -732,7 +738,6 @@ Para archivar documentos podemos utilizar el programa `tar`, cuyas opciones prin
 usuario@pc:~$ tar -cvf comprimido.tar.gz carpeta 
 usuario@pc:~$ tar -xzvf comprimido.tar.gz
 ```
-
 
 `zip` y `unzip` estos comandos cumplen la doble función de archivar y comprimir.
 
@@ -787,10 +792,8 @@ usuario@pc:$ dpkg purge   <programa>
 ---
 ## Networking
 
-Una red es un conjunto de computadoras que se cominican entre ellas intercambiando datos.
-
-Esta compuesto por devices (computadoras, impresoras, etc.), un *switch* que conecta todo junto, un *router* (ó gateway), firewall, etc.
-
+Una red es un conjunto de computadoras que se comunican entre ellas intercambiando datos.
+Esta compuesto por dispositivos (computadoras, impresoras, etc.), un *switch* que conecta todo junto, un *router* (ó gateway), firewall, etc.
 
 ### Conceptos previos: 
 - Internet Protocol (IP) address. Identificador de device en una red.
@@ -825,9 +828,7 @@ El sistema abierto de interconección (**OSI**) describe 7 capas que las computa
 - Layer 6: Presentation
 - Layer 7: Application
 
-
 El internet moderno no está basado en **OSI** sino en el modelo **TCP/IP**. Pero OSI sigue siendo usado en muchas redes.
-
 
 
 ### `ip`
@@ -859,7 +860,6 @@ eno1             UP             192.168.48.51/24 fe80::1211:60da:23fc:7e9c/64
 wlp5s0           DOWN   
 ```
 
-
 ### `ping`
 `ping` envia un paquete llamado `ICMP ECHO_REQUEST` a cierto *host*. La mayoria de los paginas responden a este paquete permitiendo verificar que la conexión se llevo a cabo con exito.
 
@@ -867,8 +867,8 @@ wlp5s0           DOWN
 usuario@pc:$ ping google.com
 ```
 
-### Intercambio de archivos en una red:
 
+### Intercambio de archivos en una red:
 
 #### `wget`
 Un command muy popular para descargar archivos, tanto de contenido web o sitios ftp es `wget`. Puede descargar archivos especificos ó multiples archivos e incluso el sistio entero. Su uso es muy simple:
@@ -953,7 +953,6 @@ usuario@pc:~$ ./<ejecutable>		#forma típica de ejecución de binarios.
 | `$PIPESTATUS`  | Array variable that holds the exit status values of each command in the most recently executed foreground pipeline.
 
 
-
 ---
 ## Expansiones
 Cada vez que tipeamos un comando y apretamos `ENTER`, `bash` realiza una serie de substituciones en el texto antes de enviar el comando. Este proceso de transformación lo llamamos *expansión*.
@@ -1007,23 +1006,46 @@ La substitución de comandos nos permite usar la salida de comandos como una exp
 ```shell
 usuario@pc:$ echo $(ls)
 ```
+hay una notación alternativa usando tilder reversos `` ` ``:
 
+```shell
+usuario@pc:$ ls -l `which cp`
+```
 
-### Commillas (*quoting*)
+## Commillas (*quoting*)
 
-**Comillas dobles**
+Aveces las expansiones no nos permiten ejecutar lo que realmente queremos:
+
+```shell
+usuario@pc:~$ echo el resultado es:              10
+el resultado es: 10         
+```
+ó
+```shell
+usuario@pc:~$ echo El costo total es $100
+El costo total es 00        
+```
+
+la shell tiene un mecanismo para suprimir las expansiones indeseadas denominado *quoting*. 
+
+### Comillas dobles `"`
 Si agregamos comillas dobles `"` a un comando, todos los caracteres especiales pierdes su significado a excepcion de: el signo de pesos (`$`), la barra invertida (`\`) y el tilde invertido (`), esto quiere decir algunas expansiones son suprimidos, a excepción de: la expansión de parámetros, aritmética y de comandos.
+```shell
+usuario@pc:~$ echo "el resultado es:              10"
+el resultado es:              10
+```
 
-**Comillas simples**:
+> &#9888; Recordar que la expansión de parametros, aritmeticas y de comandos funciona igual dentro de las comillas dobles!
+
+
+### Comillas simples `'`
 
 Si queremos suprimir cualquier tipo de expansión usamos comillas simples:
 ```shell
-usuario@pc:~$ nombre=Juan
-usuario@pc:~$ echo $nombre
-Juan
-usuario@pc:~$ echo '$nombre'
-$nombre
+usuario@pc:~$ echo 'El costo total es $100'
+El costo total es 100        
 ```
+
 
 ---
 ## Arrays
