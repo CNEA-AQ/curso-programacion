@@ -235,8 +235,12 @@ total 0
 
 notar que los links duros y tienen el mismo *inode-number* que su archivo target, pero los links simbólicos no.
 
-![linux-filesystem](./imgs/links.png)
-
+```mermaid
+flowchart BT
+    link_symb.txt -- ln -s --> archivo.txt;
+    link_hard.txt -- ln    --> inode;
+    archivo.txt   --> inode;
+```
 
 
 ### Informacion de archivos
