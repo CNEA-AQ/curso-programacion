@@ -110,7 +110,6 @@ Todo lo que sigue al simbolo **`#`** no hace absolutamente nada. No es algo dema
 
 
 ---
----
 ## Navegación
 
 ### Estructura de directorios en UNIX/Linux
@@ -391,6 +390,11 @@ usuario@pc:~$ less archivo.txt
 ```
 al ejecutarlo se entra a un modo de visualización donde podemos explorar el archivo de forma interactiva, scroleando hacia abaho usando las flechitas, para salir apretamos la tecla `q` de *quit*.
 
+Un comando muy útil para comparar archivos, es `diff`:
+```shell
+usuario@pc:~$ diff archivo1 archivo2
+```
+
 ### Editores de texto
 Si buscamos una herramienta para leer y editar un archivo de texto que contenga más funciones, tenemos varias alternativas:
 
@@ -665,14 +669,20 @@ usuario@pc:~$ uname -a
 Linux usuario 6.5.0-21-generic #21~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Feb  9 13:32:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
-```shell
-usuario@pc:~$ date 
-usuario@pc:~$ cal  
-```
-
+Existen comandos que nos dan idea de la memoria libre y el espacio en el disco rigido:
 ```shell
 usuario@pc:~$ free	      #memoria libre
 usuario@pc:~$ df	      #espacio libre en el disco rigido
+```
+
+Para ver cuanta memoria está usando un archivo o directorio existe el comando `du`:
+```shell
+usuario@pc:~$ du --block-size=M Desktop/
+```
+
+Un comando muy importante para trabajar con fechas es `date`:
+```shell
+usuario@pc:~$ date 
 ```
 
 
@@ -907,9 +917,9 @@ __**ftp**__,__**lftp**__, __**sftp**__
 ---
 
 ### Otros
-```shell
-usuario@pc:~$ diff archivo1 archivo2	#muestra diferencias entre archivos
-```
+
+
+
 
 ### Ejecutables/programas 
 ```shell
