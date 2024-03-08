@@ -3,7 +3,7 @@ layout: lecture
 title: Git
 description: Control de versiones.
 date: 2024-03-15
-ready: false
+ready: true
 ---
 
 > Git es un sistema de control de cambios que permite llevar registro de modificaciones realizadas en los archivos de un repositorio, asi como facilitar la colaboración entre otras cosas.
@@ -11,7 +11,7 @@ ready: false
 
 ## Git (local)
 
-En esta primera parte vamos a ver como utilizar Git de forma local (sin acceder a servidores remotos como github ó gitlab).
+En esta primera parte vamos a ver como utilizar Git de forma local (sin acceder a servidores remotos como *github* ó *gitlab*).
 
 
 ### Iniciar un repositorio:

@@ -810,9 +810,8 @@ Una red es un conjunto de computadoras que se comunican entre ellas intercambian
 Esta compuesto por dispositivos (computadoras, impresoras, etc.), un *switch* que conecta todo junto, un *router* (ó gateway), firewall, etc.
 
 ### Conceptos previos: 
-- Internet Protocol (IP) address. Identificador de device en una red.
+- Internet Protocol (IP) address. Identificador de dispositivo en una red.
 - Puerto: conexion logica usada por programas y servicios para intercambiar información. Puede tomar valores entre 0-65535.
-- Host and domain Name
 - Uniform Resource Identifier (URI): identifica la ubicación (URL) y nombre (URN) de un recurso en la internet.
 - Domain Name Service (DNS): Asocia IPs con URLs.
 
@@ -822,10 +821,12 @@ Tipos de redes:
 - WAN (*Wide Area Network*)
 - VPN (*Virtual Private Network*)
 
+Para acceder a algún contenido en la internet necesitamos una `URL` que nos indique cómo y de donde podemos extraerla, las URL siguen la siguiente estructura:
 ```
 {protocolo}://{domainio}:{puerto}/{path}?{query-string}#{fragment}
 http://ejemplo.com:80/index.html?nombre=Juan&apellido=Garcia#Introduccion
 ```
+donde:
 - {protocolo}   : http/https/ftp
 - {dominio}     : IP ó nombre de website
 - {path}        : ruta al html o archivo
@@ -833,17 +834,17 @@ http://ejemplo.com:80/index.html?nombre=Juan&apellido=Garcia#Introduccion
 - {query-string}: variables y valores: "?var1=2&var2=3&...&varN=N".
 - {fragmento}   : seccion de la pagina
 
+<!--
 El sistema abierto de interconección (**OSI**) describe 7 capas que las computadoras usan para comunicarse en una red.
-- Layer 1: Physical
-- Layer 2: Data-link
-- Layer 3: Network
-- Layer 4: Transport
-- Layer 5: Session
-- Layer 6: Presentation
-- Layer 7: Application
-
++ Layer 1: Physical
++ Layer 2: Data-link
++ Layer 3: Network
++ Layer 4: Transport
++ Layer 5: Session
++ Layer 6: Presentation
++ Layer 7: Application
 El internet moderno no está basado en **OSI** sino en el modelo **TCP/IP**. Pero OSI sigue siendo usado en muchas redes.
-
+-->
 
 ### `ip`
 es un comando multiproposito que reemplaza al comando más antiguo `ifconfig`. La sintaxis sigue la siguiente estructura:
@@ -881,7 +882,6 @@ wlp5s0           DOWN
 usuario@pc:$ ping google.com
 ```
 
-
 ### Intercambio de archivos en una red:
 
 #### `wget`
@@ -892,19 +892,16 @@ usuario@pc:% wget example.com
 ```
 tiene multiples *flags* para haecer descarga recursiva, filtrar por patrones, elegir la ruta destino, etc.
 
-
 #### `curl`
 
 **REST** (*REpresentational State Transfer*) APIs. Es el tipo más común de API, y es una API con soporte a métodos HTTP/HTTPS:
 
-| `GET`    |              |  
-| `PUT`    |              |  
-| `DELETE` |              |  
-| `POST`   |              |  
-
-
-__**ftp**__,__**lftp**__, __**sftp**__
-
+| Método   | Descripción                 | Idempotente? |
+|----------|-----------------------------|--------------|
+| `GET`    | Obtener datos del servidor  |   Si.        |
+| `PUT`    | Modificar datos en servidor |   Si.        |
+| `DELETE` | Borrar datos                |   Si.        | 
+| `POST`   | Modificar datos en servidor |   No.        |
 
 
 ### Comunicación segura a clientes remotos 
