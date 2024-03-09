@@ -814,14 +814,13 @@ Esta compuesto por dispositivos (computadoras, impresoras, etc.), un *switch* qu
 - Puerto: conexion logica usada por programas y servicios para intercambiar información. Puede tomar valores entre 0-65535.
 - Uniform Resource Identifier (URI): identifica la ubicación (URL) y nombre (URN) de un recurso en la internet.
 - Domain Name Service (DNS): Asocia IPs con URLs.
+- Tipos de redes:
+  + LAN (*Local Area Network*)
+  + WLAN (*Wireless LAN*)
+  + WAN (*Wide Area Network*)
+  + VPN (*Virtual Private Network*)
 
-Tipos de redes:
-- LAN (*Local Area Network*)
-- WLAN (*Wireless LAN*)
-- WAN (*Wide Area Network*)
-- VPN (*Virtual Private Network*)
-
-Para acceder a algún contenido en la internet necesitamos una `URL` que nos indique cómo y de donde podemos extraerla, las URL siguen la siguiente estructura:
+Para acceder a algún contenido de internet necesitamos una `URL` para establecer la comunicación que nos indique dónde y cómo podemos ubicarla, las URL siguen la siguiente estructura:
 ```
 {protocolo}://{domainio}:{puerto}/{path}?{query-string}#{fragment}
 http://ejemplo.com:80/index.html?nombre=Juan&apellido=Garcia#Introduccion
@@ -890,7 +889,7 @@ Un command muy popular para descargar archivos, tanto de contenido web o sitios 
 ```shell
 usuario@pc:% wget example.com
 ```
-tiene multiples *flags* para haecer descarga recursiva, filtrar por patrones, elegir la ruta destino, etc.
+tiene multiples *flags* para hacer descarga recursiva, filtrar por patrones, elegir la ruta destino, etc.
 
 #### `curl`
 
@@ -904,20 +903,27 @@ tiene multiples *flags* para haecer descarga recursiva, filtrar por patrones, el
 | `POST`   | Modificar datos en servidor |   No.        |
 
 
+> &#9888; 
+
+
 ### Comunicación segura a clientes remotos 
 
-####`ssh`
+Por muchos años los sistemas UNIX tuvieron la capacidad de ser administrados de forma remota por una red interconectada. Los programas que se usaban sufrian del problema de que los mensajes que se intercambiaban estaban en texto sin encriptar, lo que haría imposible su uso en la época de la Internet.
 
-#### `scp`
+#### `ssh`
+Para suplir este problema se desarrollo un nuevo protocolo llamado: Secure SHell (`ssh`), en particular nos asegura que el host remoto es quien dice ser, y además encripta todos los mensajes intercambiado entre el local y remote host.
+
+Su uso es muy simple:
+
+```shell
+usuario@pc:~$ ssh mi_usuario@nombre_de_server:/directorio/de/acceso
+```
+una vez ejecutado, es posible que se pida una contraseña, y luego entramos a una sesión de *shell* dentro del servidor destino.
+
+> &#9888; Existen también los comandos `scp` y `sftp`, que nos permiten obtener archivos y comunicarse via ftp usando este protocolo de forma segura.
 
 
 ---
-
-### Otros
-
-
-
-
 ### Ejecutables/programas 
 ```shell
 usuario@pc:~$ ldd <ejecutable>		#lista las dependencias del ejecutable
@@ -1054,7 +1060,7 @@ el resultado es:              10
 Si queremos suprimir cualquier tipo de expansión usamos comillas simples:
 ```shell
 usuario@pc:~$ echo 'El costo total es $100'
-El costo total es 100        
+El costo total es $100        
 ```
 
 
