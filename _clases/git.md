@@ -7,7 +7,7 @@ ready: true
 ---
 
 > Git es un sistema de control de cambios que permite llevar registro de modificaciones realizadas en los archivos de un repositorio, asi como facilitar la colaboración entre otras cosas.
- 
+
 
 ## Git (local)
 
@@ -35,13 +35,13 @@ flowchart BT
 W(Working directory);
 S(....Stage........);
 H(Repositorio local);
-H--git checkout-->S;
-S--git reset   -->W;
+H--git reset   -->S;
+S--git checkout-->W;
 W--git add     -->S;
 S--git commit  -->H;
-    style W fill:#faa,stroke:#f77,stroke-width:2px,padding:20px
-    style S fill:#afa,stroke:#7f7,stroke-width:2px,padding:20px
-    style H fill:#aaf,stroke:#77f,stroke-width:2px,padding:20px 
+    style W textColor:#fff,fill:#faa,stroke:#f77,stroke-width:2px,padding:20px
+    style S textColor:#fff,fill:#afa,stroke:#7f7,stroke-width:2px,padding:20px
+    style H textColor:#fff,fill:#aaf,stroke:#77f,stroke-width:2px,padding:20px 
 ```
 Lo primero a resolver es como mover archivos de un espacio a otro, para eso hay una serie de comandos:
 - `git add <archivos>` copia los archivos en su estado actual del directorio de trabajo al *stage*.
@@ -111,7 +111,7 @@ $ git add saludo.txt
 $ git commit -m "corrección ortográfica"
 [master 1204435] corrección ortográfica
  1 file changed, 1 insertion(+), 1 deletion(-)
-``` 
+```
 
 Ahora nuestro repositorio consiste en dos *commits* ó fotografías:
 ```mermaid
@@ -235,6 +235,18 @@ $ git diff master master~2
 
 También podemos usar git diff para comparar los archivos del directorio de trabajo con el último commit simplemente usando `git diff` (sin argumentos).
 
+```mermaid
+flowchart RL
+W(Working directory);
+S(....Stage........);
+H(Repositorio local);
+S--git diff           -->W;
+H--git diff HEAD     -->W;
+H--git diff - -staged -->S
+    style W textColor:#fff,fill:#faa,stroke:#f77,stroke-width:2px,padding:20px
+    style S textColor:#fff,fill:#afa,stroke:#7f7,stroke-width:2px,padding:20px
+    style H textColor:#fff,fill:#aaf,stroke:#77f,stroke-width:2px,padding:20px 
+```
 
 ### `git stash`
 
@@ -269,6 +281,7 @@ $ git reflog
 
 ## Git (remoto)
 
+
 Clonar repositorio remoto:
 ```shell
 git clone origin master
@@ -301,7 +314,7 @@ git pull; git merge
 ```
 
 
---- 
+---
 
 ## Avanzado:
 
@@ -413,3 +426,23 @@ Para ver archivo de configuración, y editar variables:
 - `git stash`: temporarily remove modifications to working directory
 - `git bisect`: binary search history (e.g. for regressions)
 - `.gitignore`: [specify](https://git-scm.com/docs/gitignore) intentionally untracked files to ignore
+
+
+
+# El directorio `.git/`:
+El directorio `.git/` se crea cuando ejecutamos `git init` y contiene toda la información y metadatos de nuestro repo.
+A continuación veamos algunos archivos y carpetas que contiene y cuál es su proposito:
+
+- `objects/`: guarda contenido del repositorio (blobs, trees, commits, y tags). Git usa *content-based addressing* par guardar los objetos los cuales se identifican por el hash SHA-1.
+- `refs/`:contiene referencias a commits. Branches (refs/heads/), tags (refs/tags/), y referencias especiales como HEAD (refs/HEAD).
+- `HEAD`: Es una referencia simbólica que aupunta a nuestra posición en el branch.
+- `config`: This file contains configuration options for your repository.
+- `index`: This is the staging area, also known as the index. It stores information about files that are staged for the next commit.
+- `logs`:  This directory contains logs of changes made to the repository. For example, refs/heads/master would contain the log for the master branch.
+- `hooks`: This directory contains client-side or server-side scripts that Git executes based on certain actions, such as pre-commit, post-commit, pre-push, etc.
+- `info`:  This directory contains global exclude patterns for ignored files (exclude file) and auxiliary files for the Git repository.
+- `config`:      This file holds repository-specific configuration options.
+- `description`: This file is used by Git hosting services to provide a description of the repository.
+- `modules`:     This directory is used if the repository is a submodule.
+- `packed-refs`: This file contains references that have been packed (optimized for performance).
+
