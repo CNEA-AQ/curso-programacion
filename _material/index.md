@@ -10,11 +10,11 @@ En esta sección se presentan algunos libros y referencias para profundizar los 
 - [UNIX and Linux System Administration Handbook](). Evi Nemeth, Garth Snyder, Trent R. Hein, Ben Whaley. 2010. Prentice Hall.
 
 ## Git
+- [Pro Git Book](https://git-scm.com/book/es/v2). Scott Chacon & Ben Straub. 2014. Apress.
 - [The Missing Semester of Your CS Education (MIT)](https://missing.csail.mit.edu/2020/version-control/)
 - [A visual Git reference](https://marklodato.github.io/visual-git-guide/index-en.html)
 - [Learn Git concepts, not commands](https://dev.to/unseenwizzard/learn-git-concepts-not-commands-4gjc)
 - [Understanding Git through images](https://dev.to/nopenoshishi/understanding-git-through-images-4an1)
-- [Pro Git Book](https://git-scm.com/book/es/v2). Scott Chacon & Ben Straub. 2014. Apress.
 
 ## Fortran
 - [Numerical Recipes in Fortran 90](http://danida.vnu.edu.vn/cpis/files/Books/NumericalRecipesinF90.pdf)
