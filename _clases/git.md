@@ -52,7 +52,8 @@ W(Working directory);
 S(....Stage........);
 H(Repositorio local);
 H--git reset   -->S;
-S--git checkout-->W;
+S--git restore -->W;
+H--git checkout-->W;
 W--git add     -->S;
 S--git commit  -->H;
     style W textColor:#fff,fill:#faa,stroke:#f77,stroke-width:2px,padding:20px
