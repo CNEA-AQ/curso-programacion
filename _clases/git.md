@@ -17,6 +17,7 @@ En esta primera parte vamos a ver como utilizar Git de forma local (sin acceder 
 ## `git init`: Iniciar un repositorio:
 
 Para comenzar a utilizar git es necesario ir a una carpeta donde se quiere producir el respositorio e iniciar git con:
+
 ```shell
 $ git init
 Initialized empty Git repository in /home/usuario/test_git/.git/
@@ -24,13 +25,12 @@ Initialized empty Git repository in /home/usuario/test_git/.git/
 Git nos dice que se creo un repositorio (vacío). Este comando crea un subdirectorio `.git`, el cual conteine todos los archivos necesarios para el repositorio. 
 
 
-
 ## Estructura de ambiente de desarrollo:
 
 Antes de seguír veamos como se estructura nuestro ambiente de desarrollo local.
 
 - **Directorio de trabajo** ó *Working directory*: es el espacio donde trabajamos y modificamos nuestros archivos. En este espacio Git no trackea ni guarda modificaciones. Es decir si algo se modifica ó pierde dentro de este espacio no hay forma de recuperarlo.
-- *Stage* (también conocido como Index). Es un espacio intermedio entre el *working directory* y el *History*, acá pondemos archivos temporalmente que luego van a actualizar el estado del repositorio.
+- **Stage** (antiguamente conocido como *Index*). Es un espacio intermedio entre el *working directory* y el *History*, acá pondemos archivos temporalmente que luego van a actualizar el estado del repositorio.
 - *History* ó **repositorio local**, este es el espacio más importante. Acá es donde se van a ir almacenando sucesivas "versiones" ó estados del repositorio que llamaremos *commits*. Cada vez que envíamos uno ó un grupo de archivos al *History* (decimos que hacemos un *commit*) actualizamos el estado del proyecto y se crea una nueva "fotografía" del repositorio. Esta fotografía representa el estado del repositorio de ese momento y que luego puede ser utilizada para comparar con las versiones anteriores y posteriores del repositorio (entre otras cosas).
 
 
@@ -44,11 +44,10 @@ Cualquier archivo dentro de nuestra carpeta de desarrollo puede estar en alguno 
 
 Los archivos rastreados (*tracked*) son los que estaban en la última "fotografía" del proyecto: pueden ser archivos sin modificar, modificados ó preparados. Los archivos sin rastrear (*untracked*) son todos los demas.
 
-
 Sé que al principio esto puede resultar bastante abstracto, pero a medida que usemos Git vamos a entender cual es la función de cada espacio. 
 
 ```mermaid
-flowchart BT
+flowchart LR
 W(Working directory);
 S(....Stage........);
 H(Repositorio local);
@@ -303,7 +302,7 @@ $ git checkout master
 ---
 # Ramificacón (*branching*) y fusión (*merging*)
 
-
+En la mayoria de los desarrollos de software hay gente que trabaja de forma paralela en distintas partes ó funciones del código. Para hacer esto hacen uso de la creacción y fusión de "ramas" ó *branches*.
 
 
 ## `git checkout -b`: Crear branch
@@ -318,6 +317,9 @@ Primero tenemos que generar una rama nueva, esto se puede realizar con el comand
 $ git checkout -b "despedida"
 Switched to a new branch 'despedida'
 ```
+vemos que git creo la rama `despedida` e inmediatamente puso el `HEAD` en esa rama.
+
+> &#9888; Una comando equivalente a `git checkout -b <rama>` es `git branch <rama>`.
 
 Hacemos las modificaciones:
 ```shell
@@ -338,9 +340,9 @@ Con `git log --oneline --all` vamos a poder ver como queda nuestro repositorio.
     commit id: "d7687ef" type: HIGHLIGHT
 ```
 
-## `git merge`: 
+## `git merge`: fusionar ramas.
 
-Ahora supongamos que queremos incorporar nuestra modificación al branch principal, para esto tenemos que "unir" los dos branches usando el comando `git merge`.
+Ahora supongamos que queremos incorporar nuestra modificación al branch principal, para esto tenemos que "unir" ó "fusionar" los dos branches usando el comando `git merge`.
 
 Lo primero que hacemos es volver a nuestro branch principal y luego lo "mergeamos" con el branch nuevo (`despedida`):
 ```shell
@@ -359,8 +361,10 @@ La estructura de nuestro repositorio ahora es:
    merge despedida type: HIGHLIGHT
 ```
 
+> &#9888; Para resolver conflictos podemos usar alguna herramienta gráfica usando `git mergetool`.
 
-### `git cherry pick`
+
+### `git cherry pick`: traer algo de un commit de otra rama.
 
 A veces queremos traer de otro branch no la totalidad de las modificaciones, sino tan solo un commit en particular. Para esto existe el comando `git cherry pick`
 
@@ -376,11 +380,7 @@ Aveces ocurre que abrimos un branch, lo empezamos a trabajar y en paralelo el ot
 Se puede pensar a `rebase` como una forma corta de hacer sucesivos `cherry pick`.
 
 
-
-
-
-
-
+> &#9888; `git rebase` es un comando potencialmente peligroso cuando trabajamos en proyectos grandes con muchas ramas y actividad. Por lo cual se recomienda usarlo con mucha precaución, ó ante la duda elegir mejor usar `git merge`.
 
 
 ---
@@ -417,22 +417,24 @@ tipicamente usamos: `git push origin master`.
 
 Para obtener datos de proyectos remotos ejecutamos:
 ```shell
-$ git fetch
+$ git fetch <repo_remoto> <rama>
 ```
-este comando va al proyecto remoto y trae toos lso datos que no tenemos en nuestro ambiente local. 
+este comando va al proyecto remoto y trae toos lso datos que no tenemos en nuestro ambiente local. Pero no modifica nuestro directorio de trabajo.
 
 
 ## `git pull`: Traer la version existente en repositorio remoto al repositorio local
+
+Como ya vimos `git fetch` trae los cambios del servidor que no tenemos, pero sin modificar tu directorio de trabajo. Si queremos aplicar los cambios a nuestro entorno tenemos que aplicar `git merge`. El comando `git pull` simplemente resume estos dos procesos en uno solo:
+
 ```shell
-$ git pull
+$ git pull <repo_remoto> <rama>
 ```
 
 es equivalente a hacer:
 ```shell
-$ git fetch; git merge
+$ git fetch <repo_remoto> <rama>
+$ git merge
 ```
-
-
 
 
 
