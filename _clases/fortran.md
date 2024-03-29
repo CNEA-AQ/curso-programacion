@@ -3,7 +3,7 @@ layout: lecture
 title: Fortran 
 descripcion: Lenguaje de programación Fortran.
 date: 2024-04-05
-ready: false
+ready: true
 ---
 
 > Fortran es un lenguaje de programación de alto nivel de propósito general, procedimental e imperativo, que está especialmente adaptado al cálculo numérico y a la computación científica.

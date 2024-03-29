@@ -6,3 +6,5 @@ description: Lenguaje de programación Python
 ready: false
 ---
 
+
+Jupyter notebook de Pablo:  [clase_python.ipynb](./clase_python.ipynb)

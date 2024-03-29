@@ -62,10 +62,11 @@ S--git commit  -->H;
 ```
 
 Lo primero a resolver es como mover archivos de un espacio a otro, para eso hay una serie de comandos:
-- `git add <archivos>` **prepara** archivos (los manda al *stage*).
+- `git add <archivo>` **prepara** archivos (los manda al *stage*).
 - `git commit` **confirma** archivos del *stage* (crea una nueva *fotografía* del proyecto).
-- `git reset <archivos>` saca del *stage* un archivo, es decir lo copia del último commit y lo pone en el *stage*. 
-- `git checkout <archivos>` copia los archivos desde el *stage* al directorio de trabajo. Sirve para descartar cambios locales.
+- `git reset <archivo>` saca del *stage* un archivo, es decir lo copia del último commit y lo pone en el *stage*. 
+- `git restore <archivo>` trae del *stage* un archivo, es decir descarta los cambios en el directorio de trabajo. 
+- `git checkout <archivo>` copia el archivo desde la ultima fotografía al directorio de trabajo. 
 
 A continuación vamos a construir un ejemplo para ver estos comandos en práctica.
 
@@ -123,8 +124,6 @@ Ahora nuestro repositorio consiste en dos *commits* ó fotografías:
     commit id: "6597b4d"
     commit id: "1204435" type: HIGHLIGHT
 ```
-
-
 
 
 
